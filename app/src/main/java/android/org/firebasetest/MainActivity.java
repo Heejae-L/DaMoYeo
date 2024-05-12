@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 public class
 MainActivity extends AppCompatActivity {
-    private Button signOutButton;
+    private Button signOutButton, createGroupButton, viewGroupsButton;;
     private TextView Name;
     private FirebaseAuth mAuth;  // Firebase Auth 객체 선언
     private static final String TAG = "MainActivity";
@@ -98,8 +98,18 @@ MainActivity extends AppCompatActivity {
             }
         });
 
-
+        setupButtons();
     }
+    private void setupButtons() {
+        signOutButton = findViewById(R.id.sign_out_button);
+        createGroupButton = findViewById(R.id.createGroup);
+        viewGroupsButton = findViewById(R.id.viewGroups);
+
+        signOutButton.setOnClickListener(v -> signOut());
+        createGroupButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, CreateGroupActivity.class)));
+        viewGroupsButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ViewGroupActivity.class)));
+    }
+
     private void signOut() {
         mAuth.signOut();  // Firebase에서 로그아웃
         Intent intent = new Intent(MainActivity.this, EmailLoginActivity.class);

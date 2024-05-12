@@ -1,24 +1,71 @@
 package android.org.firebasetest;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Group {
+public class Group implements Parcelable {
     private String groupId;
     private String description;
     private String title;
     private String date;
-    private List<String> memberIds;
+    private Map<String, Boolean> memberIds; // memberIds as a Map
 
     public Group() {
         // Default constructor required for Firebase
     }
 
-    public Group(String groupId, String description, String title, String date, List<String> memberIds) {
+    public Group(String groupId, String description, String title, String date, Map<String, Boolean> memberIds) {
         this.groupId = groupId;
         this.description = description;
         this.title = title;
         this.date = date;
         this.memberIds = memberIds;
+    }
+
+    protected Group(Parcel in) {
+        groupId = in.readString();
+        description = in.readString();
+        title = in.readString();
+        date = in.readString();
+        int size = in.readInt();
+        memberIds = new HashMap<>();
+        for (int i = 0; i < size; i++) {
+            String key = in.readString();
+            Boolean value = (in.readInt() == 1);
+            memberIds.put(key, value);
+        }
+    }
+
+    public static final Creator<Group> CREATOR = new Creator<Group>() {
+        @Override
+        public Group createFromParcel(Parcel in) {
+            return new Group(in);
+        }
+
+        @Override
+        public Group[] newArray(int size) {
+            return new Group[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(groupId);
+        dest.writeString(description);
+        dest.writeString(title);
+        dest.writeString(date);
+        dest.writeInt(memberIds.size()); // Write the size of the map
+        for (Map.Entry<String, Boolean> entry : memberIds.entrySet()) {
+            dest.writeString(entry.getKey());
+            dest.writeInt(entry.getValue() ? 1 : 0); // Write the Boolean as an int
+        }
     }
 
     // Getters and setters
@@ -30,6 +77,6 @@ public class Group {
     public void setTitle(String title) { this.title = title; }
     public String getDate() { return date; }
     public void setDate(String date) { this.date = date; }
-    public List<String> getMemberIds() { return memberIds; }
-    public void setMemberIds(List<String> memberIds) { this.memberIds = memberIds; }
+    public Map<String, Boolean> getMemberIds() { return memberIds; }
+    public void setMemberIds(Map<String, Boolean> memberIds) { this.memberIds = memberIds; }
 }

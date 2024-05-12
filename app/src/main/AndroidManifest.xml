@@ -25,6 +25,11 @@
         <activity android:name=".RegisterActivity"/>
         <activity android:name=".WriteDiaryActivity"/>
         <activity android:name=".ViewDiariesActivity"/>
+        <activity android:name=".CreateGroupActivity"/>
+        <activity android:name=".ViewGroupActivity"/>
+        <activity android:name=".GroupActivity"/>
+        <activity android:name=".WriteMemoActivity"/>
+        <activity android:name=".ViewMemoActivity"/>
     </application>
 
 </manifest>

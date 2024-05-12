@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textViewFeeling"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Feeling:"
+        android:layout_margin="16dp"/>
+
+    <EditText
+        android:id="@+id/editTextFeeling"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewFeeling"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Enter your feeling"/>
+
+    <TextView
+        android:id="@+id/textViewBodyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Body Text:"
+        android:layout_below="@id/editTextFeeling"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
+
+    <EditText
+        android:id="@+id/editTextBodyText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewBodyText"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Enter your memo"/>
+
+    <Button
+        android:id="@+id/buttonSaveMemo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextBodyText"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Save"/>
+</RelativeLayout>

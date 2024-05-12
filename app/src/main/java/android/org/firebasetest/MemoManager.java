@@ -12,12 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MemoManager {
-    private final DatabaseReference database;
+    private DatabaseReference database; // Make it private to encapsulate
 
     public MemoManager() {
         database = FirebaseDatabase.getInstance().getReference("memos");
     }
-
+    public DatabaseReference getDatabase() {
+        return database;
+    }
     public void saveMemo(Memo memo) {
         database.child(memo.getMemoId()).setValue(memo);
     }
