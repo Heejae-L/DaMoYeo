@@ -54,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if (firebaseUser != null) {
                             String userId = firebaseUser.getUid();
                             // Firebase에 사용자 정보를 저장합니다.
-                            User user = new User(userId, name, email, Integer.parseInt(age), null); // 나이는 예시로 0으로 설정
+                            User user = new User(userId, name, email, Integer.parseInt(age),null,0 ,null); // 나이는 예시로 0으로 설정
                             userManager.saveUser(user);
                             Toast.makeText(RegisterActivity.this, "User registration successful", Toast.LENGTH_SHORT).show();
                             finish(); // 활동 종료

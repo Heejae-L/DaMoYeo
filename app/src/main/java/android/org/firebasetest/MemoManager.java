@@ -22,7 +22,72 @@ public class MemoManager {
         database.child(memo.getMemoId()).setValue(memo);
     }
 
-    public void fetchMemos(ValueEventListener listener) {
-        database.addListenerForSingleValueEvent(listener);
+    public void fetchMemos(MemosCallback callback) {
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Memo> memos = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Memo memo = snapshot.getValue(Memo.class);
+                    memos.add(memo);
+                }
+                callback.onMemosRetrieved(memos);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onError(databaseError.toException());
+            }
+        });
+    }
+
+    // 메모 그룹별로 가져오기
+    public void fetchMemosByGroupId(String groupId, MemosCallback callback) {
+        database.orderByChild("groupId").equalTo(groupId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Memo> groupMemos = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Memo memo = snapshot.getValue(Memo.class);
+                    groupMemos.add(memo);
+                }
+                callback.onMemosRetrieved(groupMemos);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onError(databaseError.toException());
+            }
+        });
+    }
+
+    // 특정 메모 상세 정보 가져오기
+    public void fetchMemoById(String memoId, MemoCallback callback) {
+        database.child(memoId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Memo memo = dataSnapshot.getValue(Memo.class);
+                    callback.onMemoRetrieved(memo);
+                } else {
+                    callback.onError(new Exception("Memo not found"));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onError(databaseError.toException());
+            }
+        });
+    }
+
+    public interface MemosCallback {
+        void onMemosRetrieved(List<Memo> memos);
+        void onError(Exception exception);
+    }
+
+    public interface MemoCallback {
+        void onMemoRetrieved(Memo memo);
+        void onError(Exception exception);
     }
 }

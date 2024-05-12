@@ -80,11 +80,31 @@ MainActivity extends AppCompatActivity {
             }
         });
 
+        Button WriteDiaryButton = findViewById(R.id.writeDiary);
+        WriteDiaryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, WriteDiaryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button viewDiariesButton = findViewById(R.id.viewDiariesButton);
+        viewDiariesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ViewDiariesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
     }
     private void signOut() {
         mAuth.signOut();  // Firebase에서 로그아웃
         Intent intent = new Intent(MainActivity.this, EmailLoginActivity.class);
-        startActivity(intent);  // 로그인 화면으로 이동
-        finish();  // 현재 액티비티 종료
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // 태스크를 새로 시작하고 이전 태스크는 클리어
+        startActivity(intent);
     }
+
 }
