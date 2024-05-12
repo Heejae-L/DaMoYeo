@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "629319691425",
+    "project_id": "extendable-diary",
+    "storage_bucket": "extendable-diary.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:629319691425:android:a93492935dcfd73b87d4e0",
+        "android_client_info": {
+          "package_name": "android.org.firebasetest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXu2XJxaF0F_zN-rIQxxS78bvs7OdL9PU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
