@@ -37,6 +37,14 @@ public class GroupActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        Button addMemberButton = findViewById(R.id.AddMemberButton);
+        addMemberButton.setOnClickListener(v -> {
+            Intent intent = new Intent(GroupActivity.this, AddGroupMemberActivity.class);
+            intent.putExtra("groupId", group.getGroupId());  // Ensure 'group' is available here as in your existing code
+            startActivity(intent);
+        });
+
+
     }
 
 }

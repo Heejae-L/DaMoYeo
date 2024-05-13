@@ -40,4 +40,14 @@
         android:text="view Memo"/>
 
 
+    <Button
+        android:id="@+id/AddMemberButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ViewMemoButton"
+        android:text="Add member"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/teal_200"
+        android:layout_marginBottom="16dp" />
+
 </RelativeLayout>

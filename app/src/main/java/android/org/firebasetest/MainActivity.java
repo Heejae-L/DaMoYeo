@@ -25,7 +25,8 @@ MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;  // Firebase Auth 객체 선언
     private static final String TAG = "MainActivity";
     private FirebaseDataUploader uploader;
-
+    // 인텐트에서 사용자 ID 가져오기
+    String userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,9 +34,8 @@ MainActivity extends AppCompatActivity {
 
         // Firebase 초기화
         FirebaseApp.initializeApp(this);
+        userId = getIntent().getStringExtra("userId");
 
-        // 인텐트에서 사용자 ID 가져오기
-        String userId = getIntent().getStringExtra("userId");
         if (userId != null) {
             Log.d("MainActivity", "User ID: " + userId);
             // 여기에서 사용자 ID를 사용하여 추가 작업 수행
@@ -85,6 +85,16 @@ MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, WriteDiaryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button UserPageButton = findViewById(R.id.user_page_button);
+        UserPageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, UserActivity.class);
+                intent.putExtra("userId", userId); // Passing the Group object
                 startActivity(intent);
             }
         });

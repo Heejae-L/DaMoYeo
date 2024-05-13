@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">FirebaseTest</string>
     <string name="default_web_client_id">your-web-client-id</string>
+    <string-array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
 </resources>
