@@ -1,5 +1,6 @@
 package android.org.firebasetest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -44,6 +45,12 @@ public class ViewMemoActivity extends AppCompatActivity {
             Toast.makeText(this, "Group ID is not specified", Toast.LENGTH_SHORT).show();
             finish(); // Finish activity if groupId is not found
         }
+        listViewMemos.setOnItemClickListener((parent, view, position, id) -> {
+            Memo selectedMemo = memos.get(position);
+            Intent intent = new Intent(ViewMemoActivity.this, MemoActivity.class);
+            intent.putExtra("memo", selectedMemo); // Passing the selected Memo object to MemoActivity
+            startActivity(intent);
+        });
     }
 
     private void loadMemosForGroup(String groupId) {

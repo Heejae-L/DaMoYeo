@@ -30,6 +30,8 @@
         <activity android:name=".GroupActivity"/>
         <activity android:name=".WriteMemoActivity"/>
         <activity android:name=".ViewMemoActivity"/>
+        <activity android:name=".MemoActivity"/>
+        <activity android:name=".EditMemoActivity"/>
     </application>
 
 </manifest>
