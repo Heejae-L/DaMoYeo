@@ -26,6 +26,7 @@ public class AddGroupMemberActivity extends AppCompatActivity {
     private DatabaseReference databaseReference, usersReference, invitationsReference;
 
     private String groupId;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,9 @@ public class AddGroupMemberActivity extends AppCompatActivity {
         editTextMemberEmail = findViewById(R.id.editTextMemberId);
         buttonAddMember = findViewById(R.id.buttonAddMember);
 
+        userId = getIntent().getStringExtra("userId");
         groupId = getIntent().getStringExtra("groupId");
+
         if (groupId == null) {
             Toast.makeText(this, "Group ID is missing.", Toast.LENGTH_SHORT).show();
             finish();
@@ -66,8 +69,8 @@ public class AddGroupMemberActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        String userId = snapshot.getKey();
-                        inviteUserToGroup(userId, email);
+                        String inviteeId = snapshot.getKey();
+                        inviteUserToGroup(userId, email, inviteeId);
                     }
                 } else {
                     Toast.makeText(AddGroupMemberActivity.this, "No user found with that email", Toast.LENGTH_SHORT).show();
@@ -81,13 +84,13 @@ public class AddGroupMemberActivity extends AppCompatActivity {
         });
     }
 
-    private void inviteUserToGroup(String userId, String email) {
+    private void inviteUserToGroup(String inviterId, String email, String inviteeId) {
         String invitationId = invitationsReference.push().getKey(); // Create a unique invitation ID
         Map<String, Object> invitationData = new HashMap<>();
         invitationData.put("invitationId", invitationId);
         invitationData.put("groupId", groupId);
-        invitationData.put("inviterId", "currentUserId"); // Should be replaced with the actual user ID of the person sending the invitation
-        invitationData.put("inviteeId", userId);
+        invitationData.put("inviterId", inviterId);
+        invitationData.put("inviteeId", inviteeId);
         invitationData.put("email", email); // Optional: Store email as well in the invitation
         invitationData.put("date", getCurrentDate()); // Replace with the actual current date
         invitationData.put("status", "pending"); // Initial status of the invitation

@@ -1,5 +1,10 @@
 package android.org.firebasetest;
-public class Diary {
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Diary implements Parcelable {
+    private String diaryId;
     private String authorId;
     private String date;
     private String weather;
@@ -14,7 +19,8 @@ public class Diary {
     }
 
     // 모든 필드를 포함하는 생성자
-    public Diary(String authorId, String date, String weather, String feeling, String location, String image, String voice, String content) {
+    public Diary(String diaryId, String authorId, String date, String weather, String feeling, String location, String image, String voice, String content) {
+        this.diaryId = diaryId;
         this.authorId = authorId;
         this.date = date;
         this.weather = weather;
@@ -25,7 +31,58 @@ public class Diary {
         this.content = content;
     }
 
+    // Parcelable 생성자
+    protected Diary(Parcel in) {
+        diaryId = in.readString();
+        authorId = in.readString();
+        date = in.readString();
+        weather = in.readString();
+        feeling = in.readString();
+        location = in.readString();
+        image = in.readString();
+        voice = in.readString();
+        content = in.readString();
+    }
+
+    public static final Parcelable.Creator<Diary> CREATOR = new Creator<Diary>() {
+        @Override
+        public Diary createFromParcel(Parcel in) {
+            return new Diary(in);
+        }
+
+        @Override
+        public Diary[] newArray(int size) {
+            return new Diary[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(diaryId);
+        dest.writeString(authorId);
+        dest.writeString(date);
+        dest.writeString(weather);
+        dest.writeString(feeling);
+        dest.writeString(location);
+        dest.writeString(image);
+        dest.writeString(voice);
+        dest.writeString(content);
+    }
+
     // 게터와 세터 메소드
+    public String getDiaryId() {
+        return diaryId;
+    }
+
+    public void setDiaryId(String diaryId) {
+        this.diaryId = diaryId;
+    }
+
     public String getAuthorId() {
         return authorId;
     }

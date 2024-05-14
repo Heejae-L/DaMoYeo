@@ -1,32 +1,21 @@
 package android.org.firebasetest;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
+
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class
-MainActivity extends AppCompatActivity {
-    private Button signOutButton, createGroupButton, viewGroupsButton;;
+public class MainActivity extends AppCompatActivity {
     private TextView Name;
-    private FirebaseAuth mAuth;  // Firebase Auth 객체 선언
-    private static final String TAG = "MainActivity";
-    private FirebaseDataUploader uploader;
-    // 인텐트에서 사용자 ID 가져오기
-    String userId;
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,107 +23,56 @@ MainActivity extends AppCompatActivity {
 
         // Firebase 초기화
         FirebaseApp.initializeApp(this);
-        userId = getIntent().getStringExtra("userId");
+        mAuth = FirebaseAuth.getInstance();
 
-        if (userId != null) {
+        if (mAuth.getCurrentUser() != null) {
+            String userId = mAuth.getCurrentUser().getUid();
             Log.d("MainActivity", "User ID: " + userId);
-            // 여기에서 사용자 ID를 사용하여 추가 작업 수행
-        }
-        UserManager userManager = new UserManager();
-        userManager.fetchUserById(userId, new UserManager.UserCallback() {
-            @Override
-            public void onUserRetrieved(User user) {
-                String userName = user.getName();
-                if (userName != null && !userName.isEmpty()) {
+
+            UserManager userManager = new UserManager();
+            userManager.fetchUserById(userId, new UserManager.UserCallback() {
+                @Override
+                public void onUserRetrieved(User user) {
                     Name = findViewById(R.id.userName);
-                    Name.setText(userName);
+                    Name.setText(user.getName());
                 }
-            }
 
-            @Override
-            public void onError(Exception exception) {
-                // 오류 처리
-                Toast.makeText(MainActivity.this, "Error loading user information.", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onError(Exception exception) {
+                    Toast.makeText(MainActivity.this, "Error loading user information.", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-
-        signOutButton = findViewById(R.id.sign_out_button);
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signOut();
-            }
-        });
-
-        // FirebaseDataUploader 인스턴스 초기화
-        uploader = new FirebaseDataUploader();
-
-        // XML 레이아웃에 정의된 버튼을 찾습니다.
-        Button uploadButton = findViewById(R.id.uploadButton);
-        uploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 데이터 업로드 메소드 호출
-                uploader.uploadData();
-            }
-        });
-
-        Button WriteDiaryButton = findViewById(R.id.writeDiary);
-        WriteDiaryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, WriteDiaryActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Button UserPageButton = findViewById(R.id.user_page_button);
-        UserPageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, UserActivity.class);
-                intent.putExtra("userId", userId); // Passing the Group object
-                startActivity(intent);
-            }
-        });
-
-        Button viewDiariesButton = findViewById(R.id.viewDiariesButton);
-        viewDiariesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ViewDiariesActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Button ShowInvitationButton = findViewById(R.id.show_invitations);
-        ShowInvitationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ViewMyInvitationsActivity.class);
-                intent.putExtra("userId", userId); // Passing the Group object
-                startActivity(intent);
-            }
-        });
-
-        setupButtons();
+            setupButtons(userId);
+        } else {
+            // 사용자가 로그인되어 있지 않음, 로그인 액티비티로 리디렉션
+            startActivity(new Intent(this, EmailLoginActivity.class));
+            finish();
+        }
     }
-    private void setupButtons() {
-        signOutButton = findViewById(R.id.sign_out_button);
-        createGroupButton = findViewById(R.id.createGroup);
-        viewGroupsButton = findViewById(R.id.viewGroups);
 
-        signOutButton.setOnClickListener(v -> signOut());
-        createGroupButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, CreateGroupActivity.class)));
-        viewGroupsButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ViewGroupActivity.class)));
+    private void setupButtons(String userId) {
+        findViewById(R.id.sign_out_button).setOnClickListener(v -> signOut());
+        findViewById(R.id.createGroup).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, CreateGroupActivity.class)));
+        findViewById(R.id.viewGroups).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ViewGroupActivity.class)));
+        findViewById(R.id.writeDiary).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, WriteDiaryActivity.class)));
+        findViewById(R.id.user_page_button).setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserActivity.class);
+            intent.putExtra("userId", userId);
+            startActivity(intent);
+        });
+        findViewById(R.id.viewDiariesButton).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ViewDiariesActivity.class)));
+        findViewById(R.id.show_invitations).setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ViewMyInvitationsActivity.class);
+            intent.putExtra("userId", userId);
+            startActivity(intent);
+        });
     }
 
     private void signOut() {
         mAuth.signOut();  // Firebase에서 로그아웃
         Intent intent = new Intent(MainActivity.this, EmailLoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // 태스크를 새로 시작하고 이전 태스크는 클리어
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
-
 }

@@ -45,9 +45,10 @@ public class WriteDiaryActivity extends AppCompatActivity {
             String feeling = editTextFeeling.getText().toString().trim();
             String location = editTextLocation.getText().toString().trim();
             String content = editTextContent.getText().toString().trim();
+            String diaryId = diaryManager.getDatabase().push().getKey(); // Generate unique ID for the memo
 
-            Diary diary = new Diary(userId, date, weather, feeling, location, null, null, content);
-            diaryManager.saveDiary(userId, date, diary);
+            Diary diary = new Diary(diaryId, userId, date, weather, feeling, location, null, null, content);
+            diaryManager.saveDiary(userId, diary);
             Toast.makeText(this, "Diary saved successfully", Toast.LENGTH_SHORT).show();
             finish(); // Close activity after save
         } else {

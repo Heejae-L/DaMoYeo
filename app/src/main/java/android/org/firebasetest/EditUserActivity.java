@@ -39,7 +39,7 @@ public class EditUserActivity extends AppCompatActivity {
         }
 
         // Set reference to user's data in Firebase
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+        databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
         // Set up the button click listener
         buttonSaveChanges.setOnClickListener(v -> saveUserChanges());

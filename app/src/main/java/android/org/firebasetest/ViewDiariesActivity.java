@@ -1,6 +1,9 @@
 package android.org.firebasetest;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -10,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ViewDiariesActivity extends AppCompatActivity {
 
@@ -32,6 +34,17 @@ public class ViewDiariesActivity extends AppCompatActivity {
                 // ListView에 다이어리 표시
                 ArrayAdapter<Diary> adapter = new DiaryAdapter(ViewDiariesActivity.this, R.layout.diary_list_item, diaries);
                 listView.setAdapter(adapter);
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Diary diary = diaries.get(position);
+                        Intent intent = new Intent(ViewDiariesActivity.this, DiaryActivity.class);
+                        intent.putExtra("diary", diary); // Passing the Diary object
+                        intent.putExtra("userId", userId);
+                        startActivity(intent);
+                    }
+                });
             }
 
             @Override

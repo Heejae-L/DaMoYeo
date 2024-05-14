@@ -24,7 +24,7 @@ import java.util.List;
 
 public class ViewMyInvitationsActivity extends AppCompatActivity {
     private ListView listViewInvitations;
-    private DatabaseReference invitationsReference;
+    private DatabaseReference databaseReference;
     private List<Invitation> invitationList;
     private ArrayAdapter<Invitation> adapter;
 
@@ -38,32 +38,32 @@ public class ViewMyInvitationsActivity extends AppCompatActivity {
         adapter = new InvitationAdapter(invitationList);
         listViewInvitations.setAdapter(adapter);
 
-        // Assume the user is already signed in with FirebaseAuth
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        invitationsReference = FirebaseDatabase.getInstance().getReference("invitations");
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         loadInvitations(currentUserId);
     }
 
     private void loadInvitations(String userId) {
-        invitationsReference.orderByChild("inviteeId").equalTo(userId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                invitationList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Invitation invitation = snapshot.getValue(Invitation.class);
-                    if (invitation != null) {
-                        invitationList.add(invitation);
+        databaseReference.child("invitations").orderByChild("inviteeId").equalTo(userId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        invitationList.clear();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Invitation invitation = snapshot.getValue(Invitation.class);
+                            if (invitation != null) {
+                                invitationList.add(invitation);
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
                     }
-                }
-                adapter.notifyDataSetChanged();
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(ViewMyInvitationsActivity.this, "Failed to load invitations: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(ViewMyInvitationsActivity.this, "Failed to load invitations: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private class InvitationAdapter extends ArrayAdapter<Invitation> {
@@ -92,11 +92,18 @@ public class ViewMyInvitationsActivity extends AppCompatActivity {
     }
 
     private void updateInvitation(Invitation invitation, boolean accept) {
-        DatabaseReference inviteRef = invitationsReference.child(invitation.getInvitationId());
+        DatabaseReference inviteRef = databaseReference.child("invitations").child(invitation.getInvitationId());
+        DatabaseReference groupMembersRef = databaseReference.child("groups").child(invitation.getGroupId()).child("memberIds");
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         if (accept) {
             inviteRef.child("accepted").setValue(true);
-            inviteRef.child("status").setValue("Accepted");
-            Toast.makeText(this, "Invitation accepted", Toast.LENGTH_SHORT).show();
+            inviteRef.child("status").setValue("Accepted").addOnSuccessListener(aVoid -> {
+                // Add user to the group's member list
+                groupMembersRef.child(currentUserId).setValue(true)
+                        .addOnSuccessListener(aVoid2 -> Toast.makeText(ViewMyInvitationsActivity.this, "You have been added to the group and invitation accepted", Toast.LENGTH_SHORT).show())
+                        .addOnFailureListener(e -> Toast.makeText(ViewMyInvitationsActivity.this, "Failed to add to group", Toast.LENGTH_SHORT).show());
+            });
         } else {
             inviteRef.child("accepted").setValue(false);
             inviteRef.child("status").setValue("Declined");

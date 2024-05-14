@@ -1,7 +1,10 @@
 package android.org.firebasetest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +22,8 @@ public class UserActivity extends AppCompatActivity {
     private ImageView imageViewProfile;
     private DatabaseReference databaseReference;
     private String userId;
+
+    private Button editProfileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,17 @@ public class UserActivity extends AppCompatActivity {
         // Reference to user's data in Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId);
         loadUserData();
+
+        editProfileButton = findViewById(R.id.buttonEditProfile);
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserActivity.this, EditUserActivity.class);
+                intent.putExtra("userId", userId);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void loadUserData() {
