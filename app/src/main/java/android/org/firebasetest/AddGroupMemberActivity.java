@@ -7,20 +7,23 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class AddGroupMemberActivity extends AppCompatActivity {
     private EditText editTextMemberEmail;
     private Button buttonAddMember;
-    private DatabaseReference databaseReference, usersReference;
+    private DatabaseReference databaseReference, usersReference, invitationsReference;
 
     private String groupId;
 
@@ -39,8 +42,12 @@ public class AddGroupMemberActivity extends AppCompatActivity {
             return;
         }
 
+        // Reference to the members of the group
         databaseReference = FirebaseDatabase.getInstance().getReference("groups").child(groupId).child("memberIds");
+        // Reference to all users for searching by email
         usersReference = FirebaseDatabase.getInstance().getReference("users");
+        // Reference to invitations
+        invitationsReference = FirebaseDatabase.getInstance().getReference("invitations");
 
         buttonAddMember.setOnClickListener(v -> {
             String memberEmail = editTextMemberEmail.getText().toString().trim();
@@ -60,7 +67,7 @@ public class AddGroupMemberActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String userId = snapshot.getKey();
-                        addMemberToGroup(userId);
+                        inviteUserToGroup(userId, email);
                     }
                 } else {
                     Toast.makeText(AddGroupMemberActivity.this, "No user found with that email", Toast.LENGTH_SHORT).show();
@@ -74,11 +81,25 @@ public class AddGroupMemberActivity extends AppCompatActivity {
         });
     }
 
-    private void addMemberToGroup(String userId) {
-        Map<String, Object> updates = new HashMap<>();
-        updates.put(userId, true);
-        databaseReference.updateChildren(updates)
-                .addOnSuccessListener(aVoid -> Toast.makeText(AddGroupMemberActivity.this, "Member added successfully", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(AddGroupMemberActivity.this, "Failed to add member", Toast.LENGTH_SHORT).show());
+    private void inviteUserToGroup(String userId, String email) {
+        String invitationId = invitationsReference.push().getKey(); // Create a unique invitation ID
+        Map<String, Object> invitationData = new HashMap<>();
+        invitationData.put("invitationId", invitationId);
+        invitationData.put("groupId", groupId);
+        invitationData.put("inviterId", "currentUserId"); // Should be replaced with the actual user ID of the person sending the invitation
+        invitationData.put("inviteeId", userId);
+        invitationData.put("email", email); // Optional: Store email as well in the invitation
+        invitationData.put("date", getCurrentDate()); // Replace with the actual current date
+        invitationData.put("status", "pending"); // Initial status of the invitation
+        invitationData.put("accepted", false); // Initially, the invitation is not accepted
+
+        invitationsReference.child(invitationId).setValue(invitationData)
+                .addOnSuccessListener(aVoid -> Toast.makeText(AddGroupMemberActivity.this, "Invitation sent successfully", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(AddGroupMemberActivity.this, "Failed to send invitation", Toast.LENGTH_SHORT).show());
+    }
+
+    private String getCurrentDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        return sdf.format(new Date());
     }
 }

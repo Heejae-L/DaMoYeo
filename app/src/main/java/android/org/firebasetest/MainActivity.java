@@ -108,6 +108,16 @@ MainActivity extends AppCompatActivity {
             }
         });
 
+        Button ShowInvitationButton = findViewById(R.id.show_invitations);
+        ShowInvitationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ViewMyInvitationsActivity.class);
+                intent.putExtra("userId", userId); // Passing the Group object
+                startActivity(intent);
+            }
+        });
+
         setupButtons();
     }
     private void setupButtons() {
