@@ -52,5 +52,6 @@ public class ViewDiariesActivity extends AppCompatActivity {
                 Toast.makeText(ViewDiariesActivity.this, "Failed to load diaries.", Toast.LENGTH_SHORT).show();
             }
         });
+        findViewById(R.id.writeDiary).setOnClickListener(v -> startActivity(new Intent(ViewDiariesActivity.this, WriteDiaryActivity.class)));
     }
 }

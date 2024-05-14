@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.sign_out_button).setOnClickListener(v -> signOut());
         findViewById(R.id.createGroup).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, CreateGroupActivity.class)));
         findViewById(R.id.viewGroups).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ViewGroupActivity.class)));
-        findViewById(R.id.writeDiary).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, WriteDiaryActivity.class)));
         findViewById(R.id.user_page_button).setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, UserActivity.class);
             intent.putExtra("userId", userId);
