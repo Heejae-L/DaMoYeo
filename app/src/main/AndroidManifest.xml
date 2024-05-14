@@ -37,6 +37,7 @@
         <activity android:name=".AddGroupMemberActivity"/>
         <activity android:name="ViewMyInvitationsActivity"/>
         <activity android:name=".DiaryActivity"/>
+        <activity android:name=".EditDiaryActivity"/>
     </application>
 
 </manifest>
