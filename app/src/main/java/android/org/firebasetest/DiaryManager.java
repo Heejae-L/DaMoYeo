@@ -26,6 +26,10 @@ public class DiaryManager {
     public void saveDiary(String userId,Diary diary) {
         database.child(userId).child(diary.getDiaryId()).setValue(diary);
     }
+    public void deleteDiary(String userId, String diaryId) {
+        database.child(userId).child(diaryId).removeValue();
+    }
+
 
     public void fetchDiaries(String userId, DiariesCallback callback) {
         database.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {

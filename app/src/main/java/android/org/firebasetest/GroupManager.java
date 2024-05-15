@@ -26,6 +26,10 @@ public class GroupManager {
         database.addListenerForSingleValueEvent(listener);
     }
 
+    public void deleteGroup(String groupId) {
+        database.child(groupId).removeValue();
+    }
+
     public void fetchGroupsForUser(String userId, ValueEventListener listener) {
         // This method should fetch all groups where the userId is included in the memberIds list
         database.orderByChild("memberIds/" + userId).equalTo(true).addListenerForSingleValueEvent(listener);

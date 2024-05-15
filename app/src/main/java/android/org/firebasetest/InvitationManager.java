@@ -19,6 +19,10 @@ public class InvitationManager {
         database.child(invitation.getInvitationId()).setValue(invitation);
     }
 
+    public void deleteInvitation(String invitationId) {
+        database.child(invitationId).removeValue();
+    }
+
     public void fetchInvitationsForUser(String userId, ValueEventListener listener) {
         database.orderByChild("inviteeId").equalTo(userId).addListenerForSingleValueEvent(listener);
     }

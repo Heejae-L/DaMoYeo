@@ -24,6 +24,10 @@ public class MemoManager {
         database.child(memo.getMemoId()).setValue(memo);
     }
 
+    public void deleteMemo(String memoId) {
+        database.child(memoId).removeValue();
+    }
+
     public void fetchMemos(MemosCallback callback) {
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
