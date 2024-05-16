@@ -46,5 +46,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.1.1")
     implementation("com.google.firebase:firebase-auth:23.0.0")  // Firebase Auth
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")//swipe refresh
+    implementation("com.google.firebase:firebase-storage")
 
 }

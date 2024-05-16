@@ -22,7 +22,7 @@ public class UserActivity extends AppCompatActivity {
     private ImageView imageViewProfile;
     private DatabaseReference databaseReference;
     private String userId;
-
+    ProfileImageManager imageManager;
     private Button editProfileButton;
 
     @Override
@@ -36,6 +36,7 @@ public class UserActivity extends AppCompatActivity {
         textViewAge = findViewById(R.id.textViewAge);
         textViewBio = findViewById(R.id.textViewBio);
         imageViewProfile = findViewById(R.id.imageViewProfile);
+        imageManager = new ProfileImageManager();
 
         // Get user ID from intent
         userId = getIntent().getStringExtra("userId");
@@ -72,6 +73,7 @@ public class UserActivity extends AppCompatActivity {
                     textViewEmail.setText(user.getEmail());
                     textViewAge.setText(String.valueOf(user.getAge()));
                     textViewBio.setText(user.getBio());
+                    imageManager.loadProfileImage(UserActivity.this, imageViewProfile, userId);
 
                 } else {
                     Toast.makeText(UserActivity.this, "User data not found.", Toast.LENGTH_SHORT).show();
