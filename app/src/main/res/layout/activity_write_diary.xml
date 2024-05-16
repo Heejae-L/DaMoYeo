@@ -6,6 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".WriteDiaryActivity">
 
+    <!-- Top App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/top_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:navigationIcon="?android:attr/homeAsUpIndicator"
+            app:title="Write Diary" />
+    </com.google.android.material.appbar.AppBarLayout>
+
     <EditText
         android:id="@+id/editTextDate"
         android:layout_width="0dp"
@@ -13,7 +32,8 @@
         android:hint="Date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintBottom_toTopOf="@id/editTextWeather"/>
 
     <EditText
         android:id="@+id/editTextWeather"
@@ -21,6 +41,7 @@
         android:layout_height="wrap_content"
         android:hint="Weather"
         app:layout_constraintTop_toBottomOf="@id/editTextDate"
+        app:layout_constraintBottom_toTopOf="@id/editTextFeeling"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -30,6 +51,7 @@
         android:layout_height="wrap_content"
         android:hint="Feeling"
         app:layout_constraintTop_toBottomOf="@id/editTextWeather"
+        app:layout_constraintBottom_toTopOf="@id/editTextLocation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -39,17 +61,22 @@
         android:layout_height="wrap_content"
         android:hint="Location"
         app:layout_constraintTop_toBottomOf="@id/editTextFeeling"
+        app:layout_constraintBottom_toTopOf="@id/editTextContent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/editTextContent"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:hint="Content"
+        android:background="@drawable/content_background"
         app:layout_constraintTop_toBottomOf="@id/editTextLocation"
+        app:layout_constraintBottom_toTopOf="@id/buttonSaveDiary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.4" />
 
     <Button
         android:id="@+id/buttonSaveDiary"
@@ -57,6 +84,19 @@
         android:layout_height="wrap_content"
         android:text="Save Diary"
         app:layout_constraintTop_toBottomOf="@id/editTextContent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/bottom_nav_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
