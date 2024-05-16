@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -26,6 +27,7 @@ public class ViewGroupActivity extends AppCompatActivity {
     private GroupManager groupManager;
     private ArrayAdapter<String> adapter;
     private List<Group> groups;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,8 @@ public class ViewGroupActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
         listViewGroups.setAdapter(adapter);
 
+        FirebaseUser user = mAuth.getCurrentUser();
+
         groupManager = new GroupManager();
         loadUserGroups();
 
@@ -46,7 +50,7 @@ public class ViewGroupActivity extends AppCompatActivity {
                 Group group = groups.get(position);
                 Intent intent = new Intent(ViewGroupActivity.this, GroupActivity.class);
                 intent.putExtra("group", group); // Passing the Group object
-                intent.putExtra("userId", userId);
+                intent.putExtra("user", user);
                 startActivity(intent);
             }
         });

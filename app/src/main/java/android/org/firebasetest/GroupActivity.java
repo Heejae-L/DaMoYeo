@@ -25,6 +25,8 @@ public class GroupActivity extends AppCompatActivity {
     private ArrayList<String> memberNames;
     private ArrayAdapter<String> adapter;
     String userId;
+    User user;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +36,9 @@ public class GroupActivity extends AppCompatActivity {
         textViewGroupTitle = findViewById(R.id.textViewGroupTitle);
         textViewGroupDescription = findViewById(R.id.textViewGroupDescription);
         listViewMembers = findViewById(R.id.listViewMembers);
-        userId = getIntent().getStringExtra("userId");
         Group group = getIntent().getParcelableExtra("group");
+        user = getIntent().getParcelableExtra("user");
+        userId = user.getUserId();
 
         if (group != null) {
             textViewGroupTitle.setText(group.getTitle());
