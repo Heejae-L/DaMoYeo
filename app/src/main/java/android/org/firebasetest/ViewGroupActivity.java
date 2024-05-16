@@ -39,6 +39,7 @@ public class ViewGroupActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
         listViewGroups.setAdapter(adapter);
 
+        mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
         groupManager = new GroupManager();
@@ -51,6 +52,7 @@ public class ViewGroupActivity extends AppCompatActivity {
                 Intent intent = new Intent(ViewGroupActivity.this, GroupActivity.class);
                 intent.putExtra("group", group); // Passing the Group object
                 intent.putExtra("user", user);
+                intent.putExtra("userId", user.getUid());
                 startActivity(intent);
             }
         });

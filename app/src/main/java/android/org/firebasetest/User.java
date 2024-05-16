@@ -3,27 +3,29 @@ package android.org.firebasetest;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class User implements Parcelable{
+public class User implements Parcelable {
     private String userId;
     private String name;
     private String email;
     private int age;
     private String bio;
     private int isMale;
-    private String profileImageUrl; // 프로필 이미지 URL 필드 추가
+    private String gender; // Added gender field
+    private String profileImageUrl;
 
     public User() {
         // Firebase에서 사용을 위한 기본 생성자
     }
 
-    public User(String userId, String name, String email, int age, String bio, int isMale ,String profileImageUrl) {
+    public User(String userId, String name, String email, int age, String bio, String gender, String profileImageUrl) {
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.age = age;
         this.bio = bio;
-        this.isMale = isMale;
+        this.gender = gender;
         this.profileImageUrl = profileImageUrl;
+
     }
 
     protected User(Parcel in) {
@@ -32,7 +34,7 @@ public class User implements Parcelable{
         email = in.readString();
         age = in.readInt();
         bio = in.readString();
-        isMale = in.readInt();
+        gender = in.readString();
         profileImageUrl = in.readString();
     }
 
@@ -41,7 +43,6 @@ public class User implements Parcelable{
         public User createFromParcel(Parcel in) {
             return new User(in);
         }
-
         @Override
         public User[] newArray(int size) {
             return new User[size];
@@ -53,7 +54,6 @@ public class User implements Parcelable{
         return 0;
     }
 
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(userId);
@@ -61,11 +61,9 @@ public class User implements Parcelable{
         dest.writeString(email);
         dest.writeInt(age);
         dest.writeString(bio);
-        dest.writeInt(isMale);
+        dest.writeString(gender);
         dest.writeString(profileImageUrl);
     }
-
-
 
     // getter and setter methods
     public String getUserId() { return userId; }
@@ -78,8 +76,8 @@ public class User implements Parcelable{
     public void setAge(int age) { this.age = age; }
     public String getBio() { return bio; }
     public void setBio(String bio) { this.bio = bio; }
-    public int getSex() { return isMale; }
-    public void setSex(int isMale) { this.isMale = isMale; }
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
     public String getProfileImageUrl() { return profileImageUrl; }
     public void setProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
 }

@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.ArrayAdapter;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -26,12 +28,13 @@ import java.util.Map;
 public class EditUserActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> pickImageResultLauncher;
     private EditText editTextName, editTextAge, editTextBio;
+    private Spinner spinnerGender;
     private ImageView imageViewProfile;
     private Button buttonSelectProfileImage, buttonSaveChanges;
     private DatabaseReference databaseReference;
     private String userId;
     private Uri imageUri;
-
+    ArrayAdapter<CharSequence> adapter;
     private ProfileImageManager imageManager;
 
     @Override
@@ -42,9 +45,15 @@ public class EditUserActivity extends AppCompatActivity {
         editTextName = findViewById(R.id.editTextUserName);
         editTextAge = findViewById(R.id.editTextUserAge);
         editTextBio = findViewById(R.id.editTextUserBio);
+        spinnerGender = findViewById(R.id.spinnerUserGender);
         imageViewProfile = findViewById(R.id.imageViewProfile);
         buttonSelectProfileImage = findViewById(R.id.buttonUploadProfileImage);
         buttonSaveChanges = findViewById(R.id.buttonSaveUserInfo);
+
+        adapter = ArrayAdapter.createFromResource(this,
+                R.array.gender_options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerGender.setAdapter(adapter);
 
         userId = getIntent().getStringExtra("userId");
         if (userId == null) {
@@ -58,12 +67,7 @@ public class EditUserActivity extends AppCompatActivity {
         imageManager = new ProfileImageManager();
         imageManager.loadProfileImage(this, imageViewProfile, userId);
 
-        pickImageResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                imageUri = result.getData().getData();
-                imageViewProfile.setImageURI(imageUri);  // 선택한 이미지를 imageView에 설정
-            }
-        });
+
 
         buttonSelectProfileImage.setOnClickListener(v -> openGallery());
         buttonSaveChanges.setOnClickListener(v -> saveUserChanges());
@@ -78,12 +82,22 @@ public class EditUserActivity extends AppCompatActivity {
                     editTextName.setText(user.getName());
                     editTextAge.setText(String.valueOf(user.getAge()));
                     editTextBio.setText(user.getBio());
+                    if (user.getGender() != null) {
+                        int spinnerPosition = adapter.getPosition(user.getGender());
+                        spinnerGender.setSelection(spinnerPosition);
+                    }
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(EditUserActivity.this, "Failed to load user data: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditUserActivity.this, "Failed to load user data.", Toast.LENGTH_SHORT).show();
+            }
+        });
+        pickImageResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                imageUri = result.getData().getData();
+                imageViewProfile.setImageURI(imageUri);  // 선택한 이미지를 imageView에 설정
             }
         });
     }
@@ -96,21 +110,20 @@ public class EditUserActivity extends AppCompatActivity {
     private void saveUserChanges() {
         String name = editTextName.getText().toString().trim();
         String bio = editTextBio.getText().toString().trim();
-        int age = Integer.parseInt(editTextAge.getText().toString().trim());  // Assume the input is always valid
+        int age = Integer.parseInt(editTextAge.getText().toString().trim());
+        String gender = spinnerGender.getSelectedItem().toString();
 
         Map<String, Object> updates = new HashMap<>();
         updates.put("name", name);
         updates.put("bio", bio);
         updates.put("age", age);
+        updates.put("gender", gender);
 
         databaseReference.updateChildren(updates).addOnSuccessListener(aVoid -> {
-            Toast.makeText(EditUserActivity.this, "User info updated successfully", Toast.LENGTH_SHORT).show();
-            if (imageUri != null) {
-                imageManager.saveProfileImage(this, imageUri, userId);
-            }
+            Toast.makeText(EditUserActivity.this, "User info updated successfully.", Toast.LENGTH_SHORT).show();
             finish();
         }).addOnFailureListener(e -> {
-            Toast.makeText(EditUserActivity.this, "Failed to update user info", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditUserActivity.this, "Failed to update user info.", Toast.LENGTH_SHORT).show();
         });
     }
 }

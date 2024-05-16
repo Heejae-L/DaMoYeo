@@ -26,19 +26,37 @@ public class GroupActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     String userId;
     User user;
+    UserManager userManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
-
+        userManager = new UserManager();
         textViewGroupTitle = findViewById(R.id.textViewGroupTitle);
         textViewGroupDescription = findViewById(R.id.textViewGroupDescription);
         listViewMembers = findViewById(R.id.listViewMembers);
+        memberNames = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, memberNames);
+        listViewMembers.setAdapter(adapter);
+
         Group group = getIntent().getParcelableExtra("group");
-        user = getIntent().getParcelableExtra("user");
-        userId = user.getUserId();
+
+        userId = getIntent().getStringExtra("userId");
+        if (userId != null) {
+            userManager.fetchUserById(userId, new UserManager.UserCallback() {
+                @Override
+                public void onUserRetrieved(User user) {
+                    GroupActivity.this.user = user; // Now you have the user, and you can use it in your activity
+                }
+
+                @Override
+                public void onError(Exception exception) {
+                    Toast.makeText(GroupActivity.this, "Failed to fetch user: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         if (group != null) {
             textViewGroupTitle.setText(group.getTitle());
@@ -46,9 +64,7 @@ public class GroupActivity extends AppCompatActivity {
             displayGroupMembers(group.getGroupId());
         }
 
-        memberNames = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, memberNames);
-        listViewMembers.setAdapter(adapter);
+
 
         setupButtons(group);
     }
