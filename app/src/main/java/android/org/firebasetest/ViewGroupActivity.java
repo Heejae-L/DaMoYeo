@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -56,6 +57,7 @@ public class ViewGroupActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        findViewById(R.id.addGroup).setOnClickListener(v -> startActivity(new Intent(this, CreateGroupActivity.class)));
 
     }
 
