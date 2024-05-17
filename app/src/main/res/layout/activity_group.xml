@@ -47,12 +47,22 @@
         android:layout_marginTop="8dp"
         android:text="view Memo"/>
 
+    <Button
+        android:id="@+id/GroupChatButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ViewMemoButton"
+        android:textSize="16sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="group chat"/>
+
 
     <Button
         android:id="@+id/AddMemberButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ViewMemoButton"
+        android:layout_below="@id/GroupChatButton"
         android:text="Add member"
         android:textColor="@color/black"
         android:backgroundTint="@color/teal_200"

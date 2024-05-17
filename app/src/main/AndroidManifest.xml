@@ -40,6 +40,7 @@
         <activity android:name="ViewMyInvitationsActivity"/>
         <activity android:name=".DiaryActivity"/>
         <activity android:name=".EditDiaryActivity"/>
+        <activity android:name=".RealtimeChat"/>
     </application>
 
 </manifest>

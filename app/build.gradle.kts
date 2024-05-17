@@ -47,5 +47,6 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:23.0.0")  // Firebase Auth
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")//swipe refresh
     implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-firestore:23.0.3")
 
 }

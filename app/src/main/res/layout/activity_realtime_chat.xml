@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#93A1CA"
+    tools:context=".RealtimeChat">
+
+    <!-- AddChatMember 버튼 오른쪽 상단에 배치 -->
+    <Button
+        android:id="@+id/AddChatMember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:text="Add Member"/>
+
+    <!-- RecyclerView 전체 남은 공간 사용 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#93A1CA"
+        android:padding="4dp"
+        android:layout_below="@id/AddChatMember"
+        android:layout_above="@id/layout_chat" />
+
+    <!-- 하단의 채팅 입력 부분 -->
+    <LinearLayout
+        android:id="@+id/layout_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <EditText
+            android:id="@+id/editTextMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Enter message" />
+
+        <Button
+            android:id="@+id/buttonSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send" />
+
+    </LinearLayout>
+
+</RelativeLayout>

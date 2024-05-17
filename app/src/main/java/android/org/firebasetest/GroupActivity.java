@@ -33,6 +33,7 @@ public class GroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
+
         userManager = new UserManager();
         textViewGroupTitle = findViewById(R.id.textViewGroupTitle);
         textViewGroupDescription = findViewById(R.id.textViewGroupDescription);
@@ -102,6 +103,14 @@ public class GroupActivity extends AppCompatActivity {
         });
     }
 
+    private void startChatActivity(Group group, String userId) {
+        // 채팅 액티비티를 시작하는 로직을 구현합니다.
+        Intent intent = new Intent(this, RealtimeChat.class);
+        intent.putExtra("groupId", group.getGroupId());
+        intent.putExtra("userId", userId);
+        startActivity(intent);
+    }
+
     private void setupButtons(Group group) {
         Button writeMemo = findViewById(R.id.WriteMemoButton);
         writeMemo.setOnClickListener(v -> {
@@ -117,6 +126,11 @@ public class GroupActivity extends AppCompatActivity {
             intent.putExtra("group", group); // Passing the Group object
             intent.putExtra("userId", userId);
             startActivity(intent);
+        });
+
+        Button groupChatButton = findViewById(R.id.GroupChatButton);
+        groupChatButton.setOnClickListener(v -> {
+            startChatActivity(group, userId);
         });
 
         Button addMemberButton = findViewById(R.id.AddMemberButton);
