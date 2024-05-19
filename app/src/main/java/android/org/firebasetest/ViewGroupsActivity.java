@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import java.util.Map;
 
 public class ViewGroupsActivity extends AppCompatActivity {
     private ListView listViewGroups;
+    private Button createGroupButton, viewInvitationsButton;
     private GroupManager groupManager;
     private ArrayAdapter<String> adapter;
     private List<Group> groups;
@@ -73,6 +75,8 @@ public class ViewGroupsActivity extends AppCompatActivity {
             }
         });
         findViewById(R.id.addGroup).setOnClickListener(v -> startActivity(new Intent(this, CreateGroupActivity.class)));
+
+        findViewById(R.id.view_invitations_button).setOnClickListener(v->startActivity(new Intent(this, ViewMyInvitationsActivity.class)));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
