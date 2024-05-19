@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewMemoActivity">
+    tools:context=".ViewMemosActivity">
 
     <!-- Top App Bar -->
     <com.google.android.material.appbar.AppBarLayout
@@ -56,14 +56,14 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <Button
-            android:id="@+id/WriteMemoButton"
+            android:id="@+id/writeMemoButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Write" />
 
         <Button
-            android:id="@+id/delete"
+            android:id="@+id/deleteMemoButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

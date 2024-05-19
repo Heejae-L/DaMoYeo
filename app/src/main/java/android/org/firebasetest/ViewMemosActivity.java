@@ -2,27 +2,26 @@ package android.org.firebasetest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewMemoActivity extends AppCompatActivity {
+public class ViewMemosActivity extends AppCompatActivity {
     private ListView listViewMemos;
+    private Button writeMemoButton, DeleteMemoButton;
     private ArrayAdapter<String> memoAdapter;
     private List<Memo> memos;
     private MemoManager memoManager;
     private Group group;
     private String groupId;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +36,8 @@ public class ViewMemoActivity extends AppCompatActivity {
         memoManager = new MemoManager();
 
         group = getIntent().getParcelableExtra("group");
+        userId = getIntent().getStringExtra("userId");
+
         // Get the group ID passed from the previous activity
         groupId = group.getGroupId();
         if (groupId != null) {
@@ -47,10 +48,19 @@ public class ViewMemoActivity extends AppCompatActivity {
         }
         listViewMemos.setOnItemClickListener((parent, view, position, id) -> {
             Memo selectedMemo = memos.get(position);
-            Intent intent = new Intent(ViewMemoActivity.this, MemoActivity.class);
+            Intent intent = new Intent(ViewMemosActivity.this, MemoActivity.class);
             intent.putExtra("memo", selectedMemo); // Passing the selected Memo object to MemoActivity
             startActivity(intent);
         });
+
+        writeMemoButton = findViewById(R.id.writeMemoButton);
+        writeMemoButton.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), WriteMemoActivity.class);
+            intent.putExtra("group", group); // Passing the Group object
+            intent.putExtra("userId", userId);
+            startActivity(intent);
+        });
+
     }
 
     private void loadMemosForGroup(String groupId) {
@@ -68,7 +78,7 @@ public class ViewMemoActivity extends AppCompatActivity {
 
             @Override
             public void onError(Exception exception) {
-                Toast.makeText(ViewMemoActivity.this, "Failed to load memos: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewMemosActivity.this, "Failed to load memos: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

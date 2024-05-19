@@ -1,71 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".GroupActivity">
 
+    <!-- Top App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/top_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:navigationIcon="?android:attr/homeAsUpIndicator"
+            app:title="Group" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Group Title -->
     <TextView
         android:id="@+id/textViewGroupTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="GroupTitle"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Group Description -->
+    <TextView
+        android:id="@+id/textViewGroupDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GroupDescription"
+        android:textSize="16sp" />
+
+    <!-- Group Members Label -->
+    <TextView
+        android:id="@+id/textGroupMember"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_margin="16dp"/>
+        android:text="GroupMember" />
 
-    <TextView
-        android:id="@+id/textViewGroupDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewGroupTitle"
-        android:textSize="16sp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"/>
-
+    <!-- Members ListView -->
     <ListView
         android:id="@+id/listViewMembers"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewGroupDescription"
-        android:layout_marginTop="8dp"/>
+        android:layout_height="wrap_content" />
 
-
-    <Button
-        android:id="@+id/WriteMemoButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/listViewMembers"
-        android:textSize="16sp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="write Memo"/>
-    <Button
-        android:id="@+id/ViewMemoButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/WriteMemoButton"
-        android:textSize="16sp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="view Memo"/>
-
-    <Button
-        android:id="@+id/GroupChatButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ViewMemoButton"
-        android:textSize="16sp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="group chat"/>
-
-
+    <!-- Add Member Button -->
     <Button
         android:id="@+id/AddMemberButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/GroupChatButton"
         android:text="Add member"
-        android:textColor="@color/black"
-        android:backgroundTint="@color/teal_200"
-        android:layout_marginBottom="16dp" />
+        android:layout_gravity="end" />
 
-</RelativeLayout>
+    <!-- Write Memo Button -->
+    <Button
+        android:id="@+id/WriteMemoButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Write Memo"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp" />
+
+    <!-- FrameLayout -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="50dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp" />
+
+    <!-- View Memo Button -->
+    <Button
+        android:id="@+id/ViewMemoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Memo"
+        android:textSize="16sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp" />
+
+    <!-- Group Chat Button -->
+    <Button
+        android:id="@+id/GroupChatButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Group Chat"
+        android:textSize="16sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp" />
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/bottom_nav_menu"
+        android:layout_gravity="bottom" />
+</LinearLayout>

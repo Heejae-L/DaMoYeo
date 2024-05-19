@@ -27,6 +27,7 @@ public class GroupActivity extends AppCompatActivity {
     String userId;
     User user;
     UserManager userManager;
+    ViewMemosFragment fragment;
 
 
     @Override
@@ -65,7 +66,13 @@ public class GroupActivity extends AppCompatActivity {
             displayGroupMembers(group.getGroupId());
         }
 
-
+        fragment = new ViewMemosFragment();
+        Bundle args = new Bundle();
+        args.putString("groupId", group.getGroupId());
+        fragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, fragment)
+                .commit();
 
         setupButtons(group);
     }
@@ -120,9 +127,9 @@ public class GroupActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        Button viewMemo = findViewById(R.id.ViewMemoButton);
-        viewMemo.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(),ViewMemoActivity.class);
+        Button viewMemos = findViewById(R.id.ViewMemoButton);
+        viewMemos.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), ViewMemosActivity.class);
             intent.putExtra("group", group); // Passing the Group object
             intent.putExtra("userId", userId);
             startActivity(intent);
