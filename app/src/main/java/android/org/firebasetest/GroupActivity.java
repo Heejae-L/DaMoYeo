@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -90,6 +91,10 @@ public class GroupActivity extends AppCompatActivity {
                 .commit();
 
         setupButtons(group);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
+
     }
 
     private void displayGroupMembers(String groupId) {

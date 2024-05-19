@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -64,6 +65,10 @@ public class DiaryActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
+
     }
 
     private void displayDiary(Diary diary) {

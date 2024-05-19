@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -72,6 +73,9 @@ public class ViewGroupsActivity extends AppCompatActivity {
             }
         });
         findViewById(R.id.addGroup).setOnClickListener(v -> startActivity(new Intent(this, CreateGroupActivity.class)));
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
 
     }
 

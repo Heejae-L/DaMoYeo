@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -49,6 +50,10 @@ public class WriteDiaryActivity extends AppCompatActivity {
         buttonSaveDiary = findViewById(R.id.buttonSaveDiary);
 
         buttonSaveDiary.setOnClickListener(v -> saveDiary());
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
+
     }
 
     private void saveDiary() {

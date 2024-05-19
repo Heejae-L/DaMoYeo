@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -52,6 +53,10 @@ public class ViewDiariesActivity extends AppCompatActivity {
         setupDiaryListView();
         setupSwipeRefreshLayout();
         setupWriteDiaryButton();
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
+
     }
 
     private void setupDiaryListView() {

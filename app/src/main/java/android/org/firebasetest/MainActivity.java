@@ -54,28 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 바텀 네비게이션 뷰 초기화 및 이벤트 설정
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.navigation_home) {
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-                return true;
-
-            } else if (item.getItemId() == R.id.navigation_shared) {
-                startActivity(new Intent(this, ViewGroupsActivity.class));
-                return true;
-
-            } else if (item.getItemId() == R.id.navigation_calendar) {
-                // 캘린더 보기 기능을 구현
-                return true;
-
-            } else if (item.getItemId() == R.id.navigation_profile) {
-                Intent intent = new Intent(this, UserActivity.class);
-                intent.putExtra("userId", mAuth.getCurrentUser().getUid());
-                startActivity(intent);
-                return true;
-            }
-            return false;
-        });
+        NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
     }
 
     private void setupButtons(String userId) {
