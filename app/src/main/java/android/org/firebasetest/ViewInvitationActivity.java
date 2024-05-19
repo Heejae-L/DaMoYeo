@@ -28,6 +28,8 @@ public class ViewInvitationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_invitations);
 
+
+
         listViewInvitations = findViewById(R.id.listViewInvitations);
         invitationDetailsList = new ArrayList<>();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, invitationDetailsList);

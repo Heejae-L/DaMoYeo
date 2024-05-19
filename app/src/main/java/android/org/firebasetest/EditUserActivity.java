@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +42,19 @@ public class EditUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user_info);
+
+        // 뒤로가기
+        MaterialToolbar toolbar = findViewById(R.id.top_app_bar);
+        setSupportActionBar(toolbar);  // Toolbar를 액티비티의 앱 바로 설정합니다.
+
+        // 뒤로가기 버튼 클릭 리스너 설정
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 뒤로가기 버튼이 클릭되면 현재 액티비티를 종료합니다.
+                finish();
+            }
+        });
 
         editTextName = findViewById(R.id.editTextUserName);
         editTextAge = findViewById(R.id.editTextUserAge);

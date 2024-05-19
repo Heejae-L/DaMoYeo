@@ -2,12 +2,14 @@ package android.org.firebasetest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -24,6 +26,19 @@ public class EditMemoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_memo);
+
+        // 뒤로가기
+        MaterialToolbar toolbar = findViewById(R.id.top_app_bar);
+        setSupportActionBar(toolbar);  // Toolbar를 액티비티의 앱 바로 설정합니다.
+
+        // 뒤로가기 버튼 클릭 리스너 설정
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 뒤로가기 버튼이 클릭되면 현재 액티비티를 종료합니다.
+                finish();
+            }
+        });
 
         editTextFeeling = findViewById(R.id.editTextFeeling);
         editTextBodyText = findViewById(R.id.editTextBodyText);

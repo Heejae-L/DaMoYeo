@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,19 @@ public class ViewMemosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_memos); // Make sure to create this layout file
+
+        // 뒤로가기
+        MaterialToolbar toolbar = findViewById(R.id.top_app_bar);
+        setSupportActionBar(toolbar);  // Toolbar를 액티비티의 앱 바로 설정합니다.
+
+        // 뒤로가기 버튼 클릭 리스너 설정
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 뒤로가기 버튼이 클릭되면 현재 액티비티를 종료합니다.
+                finish();
+            }
+        });
 
         listViewMemos = findViewById(R.id.listViewMemos); // Add this ListView to your layout
         memos = new ArrayList<>();

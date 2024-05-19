@@ -1,6 +1,7 @@
 package android.org.firebasetest;
 
 import android.content.Intent;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +36,19 @@ public class GroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
+
+        // 이 부분을 추가합니다.
+        MaterialToolbar toolbar = findViewById(R.id.top_app_bar);
+        setSupportActionBar(toolbar);  // Toolbar를 액티비티의 앱 바로 설정합니다.
+
+        // 뒤로가기 버튼 클릭 리스너 설정
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 뒤로가기 버튼이 클릭되면 현재 액티비티를 종료합니다.
+                finish();
+            }
+        });
 
         userManager = new UserManager();
         textViewGroupTitle = findViewById(R.id.textViewGroupTitle);

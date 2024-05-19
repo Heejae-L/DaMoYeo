@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             } else if (item.getItemId() == R.id.navigation_shared) {
-                startActivity(new Intent(this, ViewGroupActivity.class));
+                startActivity(new Intent(this, ViewGroupsActivity.class));
                 return true;
 
             } else if (item.getItemId() == R.id.navigation_calendar) {
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupButtons(String userId) {
         findViewById(R.id.sign_out_button).setOnClickListener(v -> signOut());
         findViewById(R.id.createGroup).setOnClickListener(v -> startActivity(new Intent(this, CreateGroupActivity.class)));
-        findViewById(R.id.viewGroups).setOnClickListener(v -> startActivity(new Intent(this, ViewGroupActivity.class)));
+        findViewById(R.id.viewGroups).setOnClickListener(v -> startActivity(new Intent(this, ViewGroupsActivity.class)));
         findViewById(R.id.user_page_button).setOnClickListener(v -> {
             Intent intent = new Intent(this, UserActivity.class);
             intent.putExtra("userId", userId);

@@ -6,13 +6,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ViewGroupActivity extends AppCompatActivity {
+public class ViewGroupsActivity extends AppCompatActivity {
     private ListView listViewGroups;
     private GroupManager groupManager;
     private ArrayAdapter<String> adapter;
@@ -34,6 +34,20 @@ public class ViewGroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_groups);
+
+        // 이 부분을 추가합니다.
+        MaterialToolbar toolbar = findViewById(R.id.top_app_bar);
+        setSupportActionBar(toolbar);  // Toolbar를 액티비티의 앱 바로 설정합니다.
+
+        // 뒤로가기 버튼 클릭 리스너 설정
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 뒤로가기 버튼이 클릭되면 현재 액티비티를 종료합니다.
+                finish();
+            }
+        });
+
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         listViewGroups = findViewById(R.id.listViewGroups);
         groups = new ArrayList<>();
@@ -50,7 +64,7 @@ public class ViewGroupActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Group group = groups.get(position);
-                Intent intent = new Intent(ViewGroupActivity.this, GroupActivity.class);
+                Intent intent = new Intent(ViewGroupsActivity.this, GroupActivity.class);
                 intent.putExtra("group", group); // Passing the Group object
                 intent.putExtra("user", user);
                 intent.putExtra("userId", user.getUid());
@@ -92,7 +106,7 @@ public class ViewGroupActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(ViewGroupActivity.this, "Failed to load groups: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewGroupsActivity.this, "Failed to load groups: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d("ViewGroupActivity", "Failed to load groups: " + databaseError.getMessage()); // 로드 실패 로그
             }
         });

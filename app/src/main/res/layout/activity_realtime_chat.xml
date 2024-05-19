@@ -7,6 +7,25 @@
     android:background="#93A1CA"
     tools:context=".RealtimeChat">
 
+    <!-- Top App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/top_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:navigationIcon="?android:attr/homeAsUpIndicator"
+            app:title="Group" />
+    </com.google.android.material.appbar.AppBarLayout>
+
     <!-- AddChatMember 버튼 오른쪽 상단에 배치 -->
     <Button
         android:id="@+id/AddChatMember"
