@@ -54,6 +54,13 @@ public class ViewMemosActivity extends AppCompatActivity {
             finish();
         }
 
+        listViewMemos.setOnItemClickListener((parent, view, position, id) -> {
+            Memo selectedMemo = memos.get(position);
+            Intent intent = new Intent(ViewMemosActivity.this, MemoActivity.class);
+            intent.putExtra("memo", selectedMemo); // Passing the selected Memo object to MemoActivity
+            startActivity(intent);
+        });
+
         swipeRefreshLayout.setOnRefreshListener(this::refreshMemos);
 
         writeMemoButton = findViewById(R.id.writeMemoButton);

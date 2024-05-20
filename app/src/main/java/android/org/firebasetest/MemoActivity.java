@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class MemoActivity extends AppCompatActivity {
-    private TextView textViewDate, textViewAuthor, textViewFeeling, textViewBodyText;
+    private TextView textViewDate, textViewAuthor, textViewFeeling, textViewBodyText, textViewWeather;
     private Button buttonEditMemo;
     private UserManager userManager;
 
@@ -39,6 +39,7 @@ public class MemoActivity extends AppCompatActivity {
         textViewDate = findViewById(R.id.textViewDate);
         textViewAuthor = findViewById(R.id.textViewAuthor);
         textViewFeeling = findViewById(R.id.textViewFeeling);
+        textViewWeather = findViewById(R.id.textViewWeather);
         textViewBodyText = findViewById(R.id.textViewBodyText);
         buttonEditMemo = findViewById(R.id.buttonEditMemo);
 
@@ -48,6 +49,7 @@ public class MemoActivity extends AppCompatActivity {
             textViewDate.setText("Date: " + memo.getDate());
             textViewFeeling.setText("Feeling: " + memo.getFeeling());
             textViewBodyText.setText("Content: " + memo.getBodyText());
+            textViewWeather.setText("Weather: " + memo.getWeather());
 
             if (memo.getAuthorId() != null) {
                 userManager.fetchUserById(memo.getAuthorId(), new UserManager.UserCallback() {

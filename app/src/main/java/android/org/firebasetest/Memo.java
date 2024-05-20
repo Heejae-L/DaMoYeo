@@ -12,11 +12,13 @@ public class Memo implements Parcelable {
     private String authorId;
     private String groupId;
 
+    private String weather;
+
     // Default constructor
     public Memo() {
     }
 
-    public Memo(String memoId, String feeling, String date, String bodyText, String image, String authorId, String groupId) {
+    public Memo(String memoId, String feeling, String date, String bodyText, String image, String authorId, String groupId, String weather) {
         this.memoId = memoId;
         this.feeling = feeling;
         this.date = date;
@@ -24,6 +26,7 @@ public class Memo implements Parcelable {
         this.image = image;
         this.authorId = authorId;
         this.groupId = groupId;
+        this.weather = weather;
     }
 
     protected Memo(Parcel in) {
@@ -62,6 +65,7 @@ public class Memo implements Parcelable {
         dest.writeString(image);
         dest.writeString(authorId);
         dest.writeString(groupId);
+        dest.writeString(weather);
     }
 
     // Getters and setters
@@ -79,4 +83,6 @@ public class Memo implements Parcelable {
     public void setAuthorId(String authorId) { this.authorId = authorId; }
     public String getGroupId() { return groupId; }
     public void setGroupId(String groupId) { this.groupId = groupId; }
+    public String getWeather(){return weather;  }
+    public void setWeather(String weather){this.weather = weather;  }
 }

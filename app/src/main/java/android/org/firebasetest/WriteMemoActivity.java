@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class WriteMemoActivity extends AppCompatActivity {
-    private EditText editTextFeeling, editTextBodyText;
+    private EditText editTextFeeling, editTextBodyText, editTextWeather;
     private Button buttonSaveMemo;
     private MemoManager memoManager;
     private Group group;
@@ -47,6 +47,7 @@ public class WriteMemoActivity extends AppCompatActivity {
 
         // Initialize views and Firebase components
         editTextFeeling = findViewById(R.id.editTextFeeling);
+        editTextWeather = findViewById(R.id.editTextWeather);
         editTextBodyText = findViewById(R.id.editTextBodyText);
         buttonSaveMemo = findViewById(R.id.buttonSaveMemo);
         memoManager = new MemoManager();
@@ -78,6 +79,7 @@ public class WriteMemoActivity extends AppCompatActivity {
     private void saveMemo() {
         String feeling = editTextFeeling.getText().toString().trim();
         String bodyText = editTextBodyText.getText().toString().trim();
+        String weather = editTextWeather.getText().toString().trim();
         String memoId = memoManager.getDatabase().push().getKey(); // Generate unique ID for the memo
 
         if (feeling.isEmpty() || bodyText.isEmpty()) {
@@ -86,7 +88,7 @@ public class WriteMemoActivity extends AppCompatActivity {
         }
 
         // Create a new Memo object with the provided data
-        Memo memo = new Memo(memoId, feeling, getCurrentDate(), bodyText, null, userId, groupId);
+        Memo memo = new Memo(memoId, feeling, getCurrentDate(), bodyText, null, userId, groupId, weather);
         Log.d("Memo","Memo:"+memo.getGroupId()+groupId);
 
         // Save the memo to the database
