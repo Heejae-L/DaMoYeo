@@ -36,16 +36,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Group Title -->
-            <TextView
-                android:id="@+id/textViewGroupTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="GroupTitle"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
             <!-- Group Description -->
             <TextView
                 android:id="@+id/textViewGroupDescription"
@@ -78,34 +68,45 @@
                 android:id="@+id/AddMemberButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add member" />
+                android:text="Add member"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
-            <!-- Write Memo Button -->
+            <!-- Write Map Button -->
             <Button
-                android:id="@+id/WriteMemoButton"
+                android:id="@+id/ViewMapButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Write Memo"
+                android:layout_height="40dp"
+                android:drawableRight="@drawable/ic_left_arrow"
+                android:text="Map"
                 android:textSize="16sp"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="16dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+            <!-- FrameLayout -->
+            <FrameLayout
+                android:id="@+id/fragment_map"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
+
+            <!-- View Memo Button -->
+            <Button
+                android:id="@+id/ViewMemoButton"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:drawableRight="@drawable/ic_left_arrow"
+                android:text="memos"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
 
             <!-- FrameLayout -->
             <FrameLayout
                 android:id="@+id/fragment_container"
                 android:layout_marginLeft="0dp"
-                android:layout_marginRight="50dp"
-                android:layout_width="200dp"
-                android:layout_height="150dp" />
-
-            <!-- View Memo Button -->
-            <Button
-                android:id="@+id/ViewMemoButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="View Memo"
-                android:textSize="16sp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp" />
+                android:layout_marginRight="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
 
             <!-- Group Chat Button -->
             <Button
@@ -116,6 +117,15 @@
                 android:textSize="16sp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp" />
+
+            <!-- Write Memo Button -->
+            <Button
+                android:id="@+id/WriteMemoButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Write Memo"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
 
         </LinearLayout>
 

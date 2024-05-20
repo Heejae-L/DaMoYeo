@@ -48,7 +48,7 @@ public class GroupActivity extends AppCompatActivity {
         NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
 
         userManager = new UserManager();
-        textViewGroupTitle = findViewById(R.id.textViewGroupTitle);
+//        textViewGroupTitle = findViewById(R.id.textViewGroupTitle);
         textViewGroupDescription = findViewById(R.id.textViewGroupDescription);
 
         recyclerViewMembers = findViewById(R.id.recyclerViewMembers);
@@ -91,7 +91,7 @@ public class GroupActivity extends AppCompatActivity {
         }
 
         if (group != null) {
-            textViewGroupTitle.setText(group.getTitle());
+//            textViewGroupTitle.setText(group.getTitle());
             textViewGroupDescription.setText(group.getDescription());
             // Set the toolbar title to the group name
             Toolbar toolbar = findViewById(R.id.top_app_bar);
