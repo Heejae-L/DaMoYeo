@@ -8,7 +8,9 @@
     <color name="primary_text">#000000</color>
     <color name="secondary_text">#666666</color>
     <color name="primaryColor">#FF0000</color> <!-- Red -->
+    <color name="red">#FF0000</color> <!-- Red -->
     <color name="primaryDarkColor">#0000FF</color> <!-- Blue -->
+    <color name="blue">#0000FF</color> <!-- Blue -->
     <color name="accentColor">#00FF00</color> <!-- Green -->
 
 </resources>

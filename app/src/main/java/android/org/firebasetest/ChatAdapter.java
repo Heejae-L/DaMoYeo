@@ -2,10 +2,13 @@ package android.org.firebasetest;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +20,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
     private Context context;
     private ArrayList<ChatMessage> messages;
     private String myUsername;
+
 
     public ChatAdapter(Context context, ArrayList<ChatMessage> messages, String myUsername) {
         this.context = context;
@@ -33,16 +37,26 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
-        ChatMessage message = messages.get(position);
-        holder.username.setText(message.getUsername());
-        holder.message.setText(message.getMessage());
-        holder.time.setText(new SimpleDateFormat("hh:mm a", Locale.getDefault()).format(message.getTimestamp()));
+        try {
+            ChatMessage message = messages.get(position);
+            holder.username.setText(message.getUsername());
+            holder.message.setText(message.getMessage());
+            holder.time.setText(new SimpleDateFormat("hh:mm a", Locale.getDefault()).format(message.getTimestamp()));
 
-        //내가 작성한건 노란색, 남이 작성한 채팅은 흰색으로
-        if (message.getUsername().equals(myUsername)) {
-            holder.itemView.setBackgroundColor(Color.YELLOW); // Highlight own messages
-        } else {
-            holder.itemView.setBackgroundColor(Color.WHITE); // Normal for others
+            // 모든 뷰에 기본적으로 흰색 배경을 설정
+            holder.itemView.setBackgroundColor(Color.WHITE);
+
+            // 현재 사용자의 메시지인 경우 노란색으로 변경
+            if (message.getUsername().equalsIgnoreCase(myUsername.trim())) {
+                holder.itemView.setBackgroundColor(Color.YELLOW);
+            } else {
+                holder.itemView.setBackgroundColor(Color.WHITE); // 재활용된 뷰의 배경색을 초기화
+            }
+
+
+        } catch (IndexOutOfBoundsException e) {
+            Log.e("ChatAdapter", "IndexOutOfBoundsException at position " + position);
+            Toast.makeText(context.getApplicationContext(), "IndexOutOfBoundsException at position " + position, Toast.LENGTH_SHORT).show();
         }
     }
 

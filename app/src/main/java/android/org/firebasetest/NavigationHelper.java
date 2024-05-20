@@ -24,7 +24,7 @@ public class NavigationHelper {
                 context.startActivity(new Intent(context, ViewGroupsActivity.class));
                 return true;
             } else if (itemId == R.id.navigation_calendar) {
-                // Implement calendar view
+                context.startActivity(new Intent(context, CalendarActivity.class));
                 return true;
             } else if (itemId == R.id.navigation_profile) {
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();

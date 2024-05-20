@@ -27,6 +27,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    packaging {
+        excludes.add("META-INF/DEPENDENCIES")
+        // Add more excludes or other packaging configurations as needed
+    }
+
+
 }
 
 dependencies {
@@ -48,5 +55,27 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")//swipe refresh
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-firestore:23.0.3")
+
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+//    implementation("com.google.android.gms:play-services-auth:18.0.0")
+    implementation("pub.devrel:easypermissions:3.0.0")
+    implementation("com.google.api-client:google-api-client-android:1.22.0") {
+        exclude(group = "org.apache.httpcomponents")
+    }
+    implementation("com.google.apis:google-api-services-calendar:v3-rev235-1.22.0") {
+        exclude(group = "org.apache.httpcomponents")
+    }
+
+    //링크대로 넣고 이거 추가로 넣어줘야 함
+    configurations.all {
+        exclude(group = "com.google.guava", module = "listenablefuture")
+    }
+
+    implementation("com.google.api-client:google-api-client:1.31.5")
+    implementation("com.google.oauth-client:google-oauth-client-jetty:1.31.5")
+    implementation("com.google.http-client:google-http-client-jackson2:1.40.1")
+
+
+
 
 }

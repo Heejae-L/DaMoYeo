@@ -1,41 +1,29 @@
 package android.org.firebasetest;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
+import com.google.firebase.firestore.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.appcompat.widget.Toolbar;
 
 public class RealtimeChat extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private ChatAdapter adapter;
-    private final ArrayList<ChatMessage> chatList = new ArrayList<>();
+    private ArrayList<ChatMessage> chatList = new ArrayList<>();
     private EditText editTextMessage;
     private String myUsername;
-    private String groupId; // 사용자 이름을 설정합니다.
+    private String groupId;
     private User currentUser;
     UserManager userManager;
 
@@ -44,132 +32,125 @@ public class RealtimeChat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_realtime_chat);
 
-        // 뒤로가기
-        MaterialToolbar toolbar = findViewById(R.id.top_app_bar);
-        setSupportActionBar(toolbar);  // Toolbar를 액티비티의 앱 바로 설정합니다.
-
-        // 뒤로가기 버튼 클릭 리스너 설정
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 뒤로가기 버튼이 클릭되면 현재 액티비티를 종료합니다.
-                finish();
-            }
-        });
+        Toolbar toolbar = findViewById(R.id.top_app_bar);
+        NavigationHelper.setupToolbar(toolbar, this);
 
         db = FirebaseFirestore.getInstance();
         userManager = new UserManager();
-
         String myUserId = getIntent().getStringExtra("userId");
         groupId = getIntent().getStringExtra("groupId");
+
         if (myUserId != null) {
             userManager.fetchUserById(myUserId, new UserManager.UserCallback() {
                 @Override
-                public void onUserRetrieved(android.org.firebasetest.User user) {
-                    RealtimeChat.this.currentUser = user;
+                public void onUserRetrieved(User user) {
+                    currentUser = user;
                     myUsername = currentUser.getName();
+                    initializeAdapter();
                 }
 
                 @Override
                 public void onError(Exception exception) {
                     Toast.makeText(RealtimeChat.this, "Failed to fetch user: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                    myUsername = "unknown";
+                    initializeAdapter();
                 }
             });
         } else {
             myUsername = "unknown";
-        }
+            initializeAdapter();
 
+        }
 
         Button buttonSend = findViewById(R.id.buttonSend);
         editTextMessage = findViewById(R.id.editTextMessage);
-        RecyclerView chatRecyclerView = findViewById(R.id.chatRecyclerView);
+        // RecyclerView chatRecyclerView = findViewById(R.id.chatRecyclerView);
 
-        adapter = new ChatAdapter(this, chatList, myUsername);
-        chatRecyclerView.setAdapter(adapter);
-        chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //adapter = new ChatAdapter(this, chatList, myUsername);
+        //chatRecyclerView.setAdapter(adapter);
+        //chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        buttonSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String messageText = editTextMessage.getText().toString();
-                if (!messageText.isEmpty()) {
-                    sendMessage(messageText);
-                    editTextMessage.setText("");
-                }
+        buttonSend.setOnClickListener(v -> {
+            String messageText = editTextMessage.getText().toString();
+            if (!messageText.isEmpty()) {
+                sendMessage(messageText);
+                editTextMessage.setText("");
             }
         });
 
         loadMessages();
-
     }
+
+    private void initializeAdapter() {
+        RecyclerView chatRecyclerView = findViewById(R.id.chatRecyclerView);
+        adapter = new ChatAdapter(this, chatList, myUsername);
+        chatRecyclerView.setAdapter(adapter);
+        chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
 
     private void loadMessages() {
         CollectionReference messagesRef = db.collection("Chat").document(groupId).collection("Messages");
-        messagesRef.orderBy("timestamp", Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
-                if (e != null) {
-                    return; // 오류가 있는 경우 이벤트 처리를 중지
-                }
+        messagesRef.orderBy("timestamp", Query.Direction.ASCENDING).addSnapshotListener((snapshots, e) -> {
+            if (e != null) {
+                return; // Handle the error
+            }
 
-                if (!snapshots.isEmpty()) {
-                    ArrayList<ChatMessage> newMessages = new ArrayList<>();
-                    for (QueryDocumentSnapshot doc : snapshots) {
-                        ChatMessage message = doc.toObject(ChatMessage.class);
+            if (snapshots != null && !snapshots.isEmpty()) {
+                ArrayList<ChatMessage> newMessages = new ArrayList<>();
+                for (QueryDocumentSnapshot doc : snapshots) {
+                    ChatMessage message = doc.toObject(ChatMessage.class);
+                    if (message.getTimestamp() == null) {
+                        message.setTimestamp(new Date());
+                    }
+
+                    if (message.getMessage() != null) {  // 추가된 null 체크
                         newMessages.add(message);
                     }
 
-                    // 변경 사항을 감지하고 적절한 알림을 발생시키기
-                    updateChatList(newMessages);
                 }
+                updateChatList(newMessages);
             }
         });
     }
 
     private void updateChatList(ArrayList<ChatMessage> newMessages) {
-        // 새 메시지가 기존의 것과 다르면 업데이트
-        if (!newMessages.equals(chatList)) {
-            chatList.clear();
-            chatList.addAll(newMessages);
-            adapter.notifyDataSetChanged(); // 전체 데이터가 변경되었음을 알림
-        }
-        scrollToBottom(); // 스크롤을 가장 아래로 이동
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ChatDiffCallback(chatList, newMessages));
+        chatList.clear();
+        chatList.addAll(newMessages);
+        diffResult.dispatchUpdatesTo(adapter);
+        scrollToBottom();
     }
 
-
-
-
-    //cloud store에 저장하는 함수
-    //Chat>groupId>Message로 저장됨 Message의 구성은 ChatMessage
-    //groupId로 동적으로 운영가능
     private void sendMessage(String text) {
         Map<String, Object> msg = new HashMap<>();
         msg.put("username", myUsername);
         msg.put("message", text);
         msg.put("timestamp", new Date());
-        msg.put("seenCount", getGroupMemberCount() - 1); // 그룹 멤버 수를 설정해야 합니다.
+        msg.put("seenCount", getGroupMemberCount() - 1);
 
         db.collection("Chat").document(groupId).collection("Messages")
                 .add(msg)
-                .addOnSuccessListener(documentReference -> {
-                    adapter.notifyItemInserted(chatList.size() - 1);
-                    scrollToBottom();
-                })
-                .addOnFailureListener(e -> {
-                    // 에러 핸들링
-                });
+                .addOnSuccessListener(documentReference -> scrollToBottom())
+                .addOnFailureListener(e -> Toast.makeText(RealtimeChat.this, "Failed to send message: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+
+
+
     }
 
-    //채팅 스크롤 시점을 제일 최근에 맞춤
+
+
     private void scrollToBottom() {
-        if (adapter.getItemCount() > 0) {
-            ((RecyclerView) findViewById(R.id.chatRecyclerView)).smoothScrollToPosition(adapter.getItemCount() - 1);
+        RecyclerView recyclerView = findViewById(R.id.chatRecyclerView);
+        if (recyclerView != null && recyclerView.getAdapter() != null) {
+            int itemCount = recyclerView.getAdapter().getItemCount();
+            if (itemCount > 0) {
+                recyclerView.smoothScrollToPosition(itemCount - 1);
+            }
         }
     }
 
-    //
     private int getGroupMemberCount() {
-        // 실제 구현에서는 Firestore에서 그룹 멤버 수를 불러와야 합니다.
-        return 5; // 임시적으로 멤버 수를 5로 설정
+        return 5; // Placeholder for group member count
     }
 }

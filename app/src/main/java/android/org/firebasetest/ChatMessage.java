@@ -14,12 +14,13 @@ public class ChatMessage {
     }
 
     public ChatMessage(String groupId, String username, String message, Date timestamp, int seenCount) {
-        this.groupId = groupId;
-        this.username = username;
-        this.message = message;
-        this.timestamp = timestamp;
+        this.groupId = groupId != null ? groupId : "";
+        this.username = username != null ? username : "Unknown";
+        this.message = message != null ? message : "";
+        this.timestamp = timestamp != null ? timestamp : new Date();  // timestamp가 null이면 현재 시간을 기본값으로 사용
         this.seenCount = seenCount;
-    }
+    };
+
 
     // Getters and setters
     public String getGroupId() { return groupId; }
