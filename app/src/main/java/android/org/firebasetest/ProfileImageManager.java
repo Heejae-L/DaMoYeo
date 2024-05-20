@@ -29,6 +29,7 @@ public class ProfileImageManager {
             StorageReference imageRef = storageReference.child(imagePath);
 
             final long ONE_MEGABYTE = 1024 * 1024;
+
             imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes -> {
                 Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 imageView.setImageBitmap(bmp);

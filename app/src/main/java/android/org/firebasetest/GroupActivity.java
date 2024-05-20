@@ -1,17 +1,18 @@
 package android.org.firebasetest;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,34 +23,28 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class GroupActivity extends AppCompatActivity {
+    private SwipeRefreshLayout swipeRefreshLayout;
     private TextView textViewGroupTitle, textViewGroupDescription;
     private ListView listViewMembers;
     private DatabaseReference databaseReference;
     private ArrayList<String> memberNames;
     private ArrayAdapter<String> adapter;
-    String userId;
-    User user;
-    UserManager userManager;
-    ViewMemosFragment fragment;
-
+    private String userId;
+    private User user;
+    private UserManager userManager;
+    private ViewMemosFragment fragment;
+    private Group group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
-        // 이 부분을 추가합니다.
-        MaterialToolbar toolbar = findViewById(R.id.top_app_bar);
-        setSupportActionBar(toolbar);  // Toolbar를 액티비티의 앱 바로 설정합니다.
+        Toolbar toolbar = findViewById(R.id.top_app_bar);
+        NavigationHelper.setupToolbar(toolbar, this);
 
-        // 뒤로가기 버튼 클릭 리스너 설정
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 뒤로가기 버튼이 클릭되면 현재 액티비티를 종료합니다.
-                finish();
-            }
-        });
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
 
         userManager = new UserManager();
         textViewGroupTitle = findViewById(R.id.textViewGroupTitle);
@@ -59,14 +54,30 @@ public class GroupActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, memberNames);
         listViewMembers.setAdapter(adapter);
 
-        Group group = getIntent().getParcelableExtra("group");
-
         userId = getIntent().getStringExtra("userId");
+        group = getIntent().getParcelableExtra("group");
+
+        if (group != null) {
+            loadGroupData();
+            initializeOrRefreshFragment();
+        }
+
+        setupButtons(group);
+
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            loadGroupData();
+            initializeOrRefreshFragment();
+            swipeRefreshLayout.setRefreshing(false);
+        });
+    }
+
+    private void loadGroupData() {
         if (userId != null) {
             userManager.fetchUserById(userId, new UserManager.UserCallback() {
                 @Override
                 public void onUserRetrieved(User user) {
-                    GroupActivity.this.user = user; // Now you have the user, and you can use it in your activity
+                    GroupActivity.this.user = user;
                 }
 
                 @Override
@@ -81,20 +92,6 @@ public class GroupActivity extends AppCompatActivity {
             textViewGroupDescription.setText(group.getDescription());
             displayGroupMembers(group.getGroupId());
         }
-
-        fragment = new ViewMemosFragment();
-        Bundle args = new Bundle();
-        args.putString("groupId", group.getGroupId());
-        fragment.setArguments(args);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragment)
-                .commit();
-
-        setupButtons(group);
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
-
     }
 
     private void displayGroupMembers(String groupId) {
@@ -123,6 +120,7 @@ public class GroupActivity extends AppCompatActivity {
                             });
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(GroupActivity.this, "Failed to load group members.", Toast.LENGTH_SHORT).show();
@@ -130,19 +128,30 @@ public class GroupActivity extends AppCompatActivity {
         });
     }
 
-    private void startChatActivity(Group group, String userId) {
-        // 채팅 액티비티를 시작하는 로직을 구현합니다.
-        Intent intent = new Intent(this, RealtimeChat.class);
-        intent.putExtra("groupId", group.getGroupId());
-        intent.putExtra("userId", userId);
-        startActivity(intent);
+    private void initializeOrRefreshFragment() {
+        if (fragment == null) {
+            fragment = new ViewMemosFragment();
+        }
+        Bundle args = new Bundle();
+        args.putString("groupId", group.getGroupId());
+        fragment.setArguments(args);
+
+        if (!fragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, fragment)
+                    .commit();
+        } else {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+        }
     }
 
     private void setupButtons(Group group) {
         Button writeMemo = findViewById(R.id.WriteMemoButton);
         writeMemo.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), WriteMemoActivity.class);
-            intent.putExtra("group", group); // Passing the Group object
+            intent.putExtra("group", group);
             intent.putExtra("userId", userId);
             startActivity(intent);
         });
@@ -150,15 +159,13 @@ public class GroupActivity extends AppCompatActivity {
         Button viewMemos = findViewById(R.id.ViewMemoButton);
         viewMemos.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ViewMemosActivity.class);
-            intent.putExtra("group", group); // Passing the Group object
+            intent.putExtra("group", group);
             intent.putExtra("userId", userId);
             startActivity(intent);
         });
 
         Button groupChatButton = findViewById(R.id.GroupChatButton);
-        groupChatButton.setOnClickListener(v -> {
-            startChatActivity(group, userId);
-        });
+        groupChatButton.setOnClickListener(v -> startChatActivity(group, userId));
 
         Button addMemberButton = findViewById(R.id.AddMemberButton);
         addMemberButton.setOnClickListener(v -> {
@@ -167,5 +174,12 @@ public class GroupActivity extends AppCompatActivity {
             intent.putExtra("userId", userId);
             startActivity(intent);
         });
+    }
+
+    private void startChatActivity(Group group, String userId) {
+        Intent intent = new Intent(this, RealtimeChat.class);
+        intent.putExtra("groupId", group.getGroupId());
+        intent.putExtra("userId", userId);
+        startActivity(intent);
     }
 }

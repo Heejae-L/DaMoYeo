@@ -68,14 +68,14 @@ public class ViewMyInvitationsActivity extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        invitationList.clear();
+                        invitationList.clear(); // 기존 목록을 클리어
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Invitation invitation = snapshot.getValue(Invitation.class);
-                            if (invitation != null) {
-                                invitationList.add(invitation);
+                            if (invitation != null && !invitation.isAccepted()) { // 초대 수락 여부 확인
+                                invitationList.add(invitation); // 수락되지 않은 초대만 목록에 추가
                             }
                         }
-                        adapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged(); // 어댑터에 데이터 변경을 알림
                     }
 
                     @Override
@@ -84,6 +84,7 @@ public class ViewMyInvitationsActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
     private class InvitationAdapter extends ArrayAdapter<Invitation> {
         InvitationAdapter(List<Invitation> invitations) {

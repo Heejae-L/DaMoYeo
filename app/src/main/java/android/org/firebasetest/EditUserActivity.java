@@ -81,8 +81,6 @@ public class EditUserActivity extends AppCompatActivity {
         imageManager = new ProfileImageManager();
         imageManager.loadProfileImage(this, imageViewProfile, userId);
 
-
-
         buttonSelectProfileImage.setOnClickListener(v -> openGallery());
         buttonSaveChanges.setOnClickListener(v -> saveUserChanges());
     }
@@ -134,10 +132,13 @@ public class EditUserActivity extends AppCompatActivity {
         updates.put("gender", gender);
 
         databaseReference.updateChildren(updates).addOnSuccessListener(aVoid -> {
-            Toast.makeText(EditUserActivity.this, "User info updated successfully.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditUserActivity.this, "User info updated successfully", Toast.LENGTH_SHORT).show();
+            if (imageUri != null) {
+                imageManager.saveProfileImage(this, imageUri, userId);
+            }
             finish();
         }).addOnFailureListener(e -> {
-            Toast.makeText(EditUserActivity.this, "Failed to update user info.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditUserActivity.this, "Failed to update user info", Toast.LENGTH_SHORT).show();
         });
     }
 }
