@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -35,18 +36,8 @@ public class ViewMyInvitationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_my_invitations);
 
-        // 뒤로가기
-        MaterialToolbar toolbar = findViewById(R.id.top_app_bar);
-        setSupportActionBar(toolbar);  // Toolbar를 액티비티의 앱 바로 설정합니다.
-
-        // 뒤로가기 버튼 클릭 리스너 설정
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 뒤로가기 버튼이 클릭되면 현재 액티비티를 종료합니다.
-                finish();
-            }
-        });
+        Toolbar toolbar = findViewById(R.id.top_app_bar);
+        NavigationHelper.setupToolbar(toolbar, this);
 
         listViewInvitations = findViewById(R.id.listViewInvitations);
         invitationList = new ArrayList<>();
@@ -102,13 +93,59 @@ public class ViewMyInvitationsActivity extends AppCompatActivity {
             Button buttonDecline = convertView.findViewById(R.id.buttonDecline);
 
             final Invitation invitation = getItem(position);
-            textViewDetails.setText("From: " + invitation.getInviterId() + "\nStatus: " + invitation.getStatus());
+
+            // Clear the existing text
+            textViewDetails.setText("");
+
+            // Fetch and set the group and inviter names
+            fetchGroupName(invitation.getGroupId(), textViewDetails);
+            fetchInviterName(invitation.getInviterId(), textViewDetails);
+
+            // Update status
+            textViewDetails.append("Status: " + invitation.getStatus() + "\n");
 
             buttonAccept.setOnClickListener(view -> updateInvitation(invitation, true));
             buttonDecline.setOnClickListener(view -> updateInvitation(invitation, false));
 
             return convertView;
         }
+
+    }
+    private void fetchGroupName(String groupId, final TextView textView) {
+        DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference("groups").child(groupId).child("title");
+        groupRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String groupName = dataSnapshot.getValue(String.class);
+                if (groupName != null) {
+                    // Update the textView part of the invitation item
+                    textView.setText(textView.getText() + "Group: " + groupName + "\n");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(ViewMyInvitationsActivity.this, "Failed to fetch group name: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void fetchInviterName(String inviterId, final TextView textView) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(inviterId).child("name");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String inviterName = dataSnapshot.getValue(String.class);
+                if (inviterName != null) {
+                    // Append to the current text in textView
+                    textView.setText(textView.getText() + "From: " + inviterName + "\n");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(ViewMyInvitationsActivity.this, "Failed to fetch inviter name: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void updateInvitation(Invitation invitation, boolean accept) {

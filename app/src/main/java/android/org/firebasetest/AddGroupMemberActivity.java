@@ -101,9 +101,13 @@ public class AddGroupMemberActivity extends AppCompatActivity {
         invitationData.put("accepted", false); // Initially, the invitation is not accepted
 
         invitationsReference.child(invitationId).setValue(invitationData)
-                .addOnSuccessListener(aVoid -> Toast.makeText(AddGroupMemberActivity.this, "Invitation sent successfully", Toast.LENGTH_SHORT).show())
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(AddGroupMemberActivity.this, "Invitation sent successfully", Toast.LENGTH_SHORT).show();
+                    editTextMemberEmail.setText(""); // Clear the EditText after successful invitation
+                })
                 .addOnFailureListener(e -> Toast.makeText(AddGroupMemberActivity.this, "Failed to send invitation", Toast.LENGTH_SHORT).show());
     }
+
 
     private String getCurrentDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());

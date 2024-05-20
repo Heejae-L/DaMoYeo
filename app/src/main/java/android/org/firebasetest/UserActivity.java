@@ -23,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 public class UserActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout swipeRefreshLayout;
-    private TextView textViewName, textViewEmail, textViewAge, textViewBio;
+    private TextView textViewName, textViewEmail, textViewAge, textViewBio, textViewGender;
     private ImageView imageViewProfile;
     private DatabaseReference databaseReference;
     private String userId;
@@ -54,6 +54,7 @@ public class UserActivity extends AppCompatActivity {
         textViewEmail = findViewById(R.id.textViewEmail);
         textViewAge = findViewById(R.id.textViewAge);
         textViewBio = findViewById(R.id.textViewBio);
+        textViewGender = findViewById(R.id.textViewGender);
         imageViewProfile = findViewById(R.id.imageViewProfile);
         imageManager = new ProfileImageManager();
 
@@ -92,6 +93,7 @@ public class UserActivity extends AppCompatActivity {
                     textViewEmail.setText(user.getEmail());
                     textViewAge.setText(String.valueOf(user.getAge()));
                     textViewBio.setText(user.getBio());
+                    textViewGender.setText(user.getGender());
                     imageManager.loadProfileImage(UserActivity.this, imageViewProfile, userId);
 
                 } else {
