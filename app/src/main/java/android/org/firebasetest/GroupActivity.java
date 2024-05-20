@@ -3,14 +3,14 @@ package android.org.firebasetest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -21,14 +21,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GroupActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView textViewGroupTitle, textViewGroupDescription;
-    private ListView listViewMembers;
+    private RecyclerView recyclerViewMembers;
     private DatabaseReference databaseReference;
-    private ArrayList<String> memberNames;
-    private ArrayAdapter<String> adapter;
+    private List<User> memberList;
+    private MemberAdapter adapter;
     private String userId;
     private User user;
     private UserManager userManager;
@@ -49,10 +50,12 @@ public class GroupActivity extends AppCompatActivity {
         userManager = new UserManager();
         textViewGroupTitle = findViewById(R.id.textViewGroupTitle);
         textViewGroupDescription = findViewById(R.id.textViewGroupDescription);
-        listViewMembers = findViewById(R.id.listViewMembers);
-        memberNames = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, memberNames);
-        listViewMembers.setAdapter(adapter);
+
+        recyclerViewMembers = findViewById(R.id.recyclerViewMembers);
+        memberList = new ArrayList<>();
+        adapter = new MemberAdapter(this, memberList);
+        recyclerViewMembers.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewMembers.setAdapter(adapter);
 
         userId = getIntent().getStringExtra("userId");
         group = getIntent().getParcelableExtra("group");
@@ -90,16 +93,20 @@ public class GroupActivity extends AppCompatActivity {
         if (group != null) {
             textViewGroupTitle.setText(group.getTitle());
             textViewGroupDescription.setText(group.getDescription());
+            // Set the toolbar title to the group name
+            Toolbar toolbar = findViewById(R.id.top_app_bar);
+            toolbar.setTitle(group.getTitle());
             displayGroupMembers(group.getGroupId());
         }
     }
+
 
     private void displayGroupMembers(String groupId) {
         databaseReference = FirebaseDatabase.getInstance().getReference("groups").child(groupId).child("memberIds");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                memberNames.clear();
+                memberList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String userId = snapshot.getKey();
                     FirebaseDatabase.getInstance().getReference("users").child(userId).child("name")
@@ -107,8 +114,9 @@ public class GroupActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     String userName = dataSnapshot.getValue(String.class);
+                                    User member = new User(userId, userName, "", 0, "", "", "");
                                     if (userName != null) {
-                                        memberNames.add(userName);
+                                        memberList.add(member);
                                         adapter.notifyDataSetChanged();
                                     }
                                 }

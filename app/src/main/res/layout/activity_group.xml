@@ -64,18 +64,21 @@
                 android:text="GroupMember" />
 
             <!-- Members ListView -->
-            <ListView
-                android:id="@+id/listViewMembers"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewMembers"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/member_item" />
+
 
             <!-- Add Member Button -->
             <Button
                 android:id="@+id/AddMemberButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add member"
-                android:layout_gravity="end" />
+                android:text="Add member" />
 
             <!-- Write Memo Button -->
             <Button
@@ -92,7 +95,7 @@
                 android:layout_marginLeft="0dp"
                 android:layout_marginRight="50dp"
                 android:layout_width="200dp"
-                android:layout_height="200dp" />
+                android:layout_height="150dp" />
 
             <!-- View Memo Button -->
             <Button
