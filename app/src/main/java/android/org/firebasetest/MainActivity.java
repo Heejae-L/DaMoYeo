@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("userId", userId);
             startActivity(intent);
         });
+        findViewById(R.id.map_button).setOnClickListener(v -> startActivity(new Intent(this, MapActivity.class)));
         findViewById(R.id.viewDiariesButton).setOnClickListener(v -> startActivity(new Intent(this, ViewDiariesActivity.class)));
         findViewById(R.id.show_invitations).setOnClickListener(v -> {
             Intent intent = new Intent(this, ViewMyInvitationsActivity.class);

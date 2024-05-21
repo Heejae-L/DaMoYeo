@@ -78,6 +78,10 @@ dependencies {
 
     implementation ("com.google.android.material:material:1.4.0")
 
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation("com.google.android.gms:play-services-places:17.0.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.libraries.places:places:3.4.0")
 
 
 

@@ -16,4 +16,8 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+
+    <string name="channel_name">기본 알림</string>
+    <string name="channel_description">앱의 기본 알림에 대한 설명</string>
+
 </resources>

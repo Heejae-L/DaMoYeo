@@ -46,6 +46,15 @@
         android:layout_marginBottom="8dp"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
+    <!-- Test Notification Button -->
+    <Button
+        android:id="@+id/map_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Map"
+        android:layout_marginBottom="8dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
     <!-- Show Invitations Button -->
     <Button
         android:id="@+id/show_invitations"
@@ -97,6 +106,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/windowBackground"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"/>
 
 </LinearLayout>
