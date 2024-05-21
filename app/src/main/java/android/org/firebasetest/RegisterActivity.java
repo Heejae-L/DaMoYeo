@@ -51,9 +51,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         buttonRegister.setOnClickListener(v -> registerUser());
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
-
     }
 
     private void registerUser() {

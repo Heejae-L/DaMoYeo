@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +25,7 @@ import java.util.Date;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
@@ -107,6 +109,12 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+        Toolbar toolbar = findViewById(R.id.top_app_bar);
+        NavigationHelper.setupToolbar(toolbar, this);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
 
         //초기화
         monthYearText=findViewById(R.id.monthYearText);

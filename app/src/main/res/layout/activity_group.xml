@@ -84,7 +84,7 @@
 
             <!-- FrameLayout -->
             <FrameLayout
-                android:id="@+id/fragment_map"
+                android:id="@+id/fragment_map_container"
                 android:layout_marginLeft="0dp"
                 android:layout_marginRight="0dp"
                 android:layout_width="match_parent"

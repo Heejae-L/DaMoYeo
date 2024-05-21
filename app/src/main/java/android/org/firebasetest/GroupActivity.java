@@ -25,7 +25,7 @@ import java.util.List;
 
 public class GroupActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
-    private TextView textViewGroupTitle, textViewGroupDescription;
+    private TextView textViewGroupDescription;
     private RecyclerView recyclerViewMembers;
     private DatabaseReference databaseReference;
     private List<User> memberList;
@@ -34,6 +34,8 @@ public class GroupActivity extends AppCompatActivity {
     private User user;
     private UserManager userManager;
     private ViewMemosFragment fragment;
+
+    private MapFragment mapFragment;
     private Group group;
 
     @Override
@@ -48,7 +50,6 @@ public class GroupActivity extends AppCompatActivity {
         NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
 
         userManager = new UserManager();
-//        textViewGroupTitle = findViewById(R.id.textViewGroupTitle);
         textViewGroupDescription = findViewById(R.id.textViewGroupDescription);
 
         recyclerViewMembers = findViewById(R.id.recyclerViewMembers);
@@ -63,6 +64,7 @@ public class GroupActivity extends AppCompatActivity {
         if (group != null) {
             loadGroupData();
             initializeOrRefreshFragment();
+            initializeOrRefreshMapFragment(); // MapFragment 초기화 또는 새로고침
         }
 
         setupButtons(group);
@@ -71,6 +73,7 @@ public class GroupActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(() -> {
             loadGroupData();
             initializeOrRefreshFragment();
+            initializeOrRefreshMapFragment(); // MapFragment 새로고침
             swipeRefreshLayout.setRefreshing(false);
         });
     }
@@ -91,15 +94,12 @@ public class GroupActivity extends AppCompatActivity {
         }
 
         if (group != null) {
-//            textViewGroupTitle.setText(group.getTitle());
             textViewGroupDescription.setText(group.getDescription());
-            // Set the toolbar title to the group name
             Toolbar toolbar = findViewById(R.id.top_app_bar);
             toolbar.setTitle(group.getTitle());
             displayGroupMembers(group.getGroupId());
         }
     }
-
 
     private void displayGroupMembers(String groupId) {
         databaseReference = FirebaseDatabase.getInstance().getReference("groups").child(groupId).child("memberIds");
@@ -155,6 +155,25 @@ public class GroupActivity extends AppCompatActivity {
         }
     }
 
+    private void initializeOrRefreshMapFragment() {
+        if (mapFragment == null) {
+            mapFragment = new MapFragment();
+        }
+        Bundle args = new Bundle();
+        args.putString("groupId", group.getGroupId());
+        mapFragment.setArguments(args);
+
+        if (!mapFragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_map_container, mapFragment) // R.id.fragment_map_container로 mapFragment 추가
+                    .commit();
+        } else {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_map_container, mapFragment) // R.id.fragment_map_container로 mapFragment 교체
+                    .commit();
+        }
+    }
+
     private void setupButtons(Group group) {
         Button writeMemo = findViewById(R.id.WriteMemoButton);
         writeMemo.setOnClickListener(v -> {
@@ -182,6 +201,7 @@ public class GroupActivity extends AppCompatActivity {
             intent.putExtra("userId", userId);
             startActivity(intent);
         });
+        findViewById(R.id.ViewMapButton).setOnClickListener(v -> startActivity(new Intent(this, MapActivity.class)));
     }
 
     private void startChatActivity(Group group, String userId) {
