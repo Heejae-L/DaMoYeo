@@ -74,7 +74,9 @@ public class CreateGroupActivity extends AppCompatActivity {
                 description,
                 title,
                 "",
-                memberIds
+                memberIds,
+                "",
+                ""
         );
 
         groupManager.saveGroup(newGroup);

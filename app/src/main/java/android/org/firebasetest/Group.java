@@ -10,18 +10,22 @@ public class Group implements Parcelable {
     private String description;
     private String title;
     private String date;
+    private String latitude;
+    private String longitude;
     private Map<String, Boolean> memberIds; // memberIds as a Map
 
     public Group() {
         // Default constructor required for Firebase
     }
 
-    public Group(String groupId, String description, String title, String date, Map<String, Boolean> memberIds) {
+    public Group(String groupId, String description, String title, String date, Map<String, Boolean> memberIds, String latitude, String longitude) {
         this.groupId = groupId;
         this.description = description;
         this.title = title;
         this.date = date;
         this.memberIds = memberIds;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     protected Group(Parcel in) {
@@ -36,6 +40,8 @@ public class Group implements Parcelable {
             Boolean value = (in.readInt() == 1);
             memberIds.put(key, value);
         }
+        latitude = in.readString();
+        longitude = in.readString();
     }
 
     public static final Creator<Group> CREATOR = new Creator<Group>() {
@@ -66,6 +72,8 @@ public class Group implements Parcelable {
             dest.writeString(entry.getKey());
             dest.writeInt(entry.getValue() ? 1 : 0); // Write the Boolean as an int
         }
+        dest.writeString(latitude);
+        dest.writeString(longitude);
     }
 
     // Getters and setters
@@ -79,4 +87,9 @@ public class Group implements Parcelable {
     public void setDate(String date) { this.date = date; }
     public Map<String, Boolean> getMemberIds() { return memberIds; }
     public void setMemberIds(Map<String, Boolean> memberIds) { this.memberIds = memberIds; }
+    public String getLatitude(){return latitude;}
+    public void setLatitude(String latitude){this.latitude = latitude;}
+
+    public String getLongitude(){return longitude;}
+    public void setLongitude(String longitude){this.longitude = longitude;}
 }
