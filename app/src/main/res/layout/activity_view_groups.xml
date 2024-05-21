@@ -30,6 +30,7 @@
                 android:drawableLeft="@drawable/ic_invitation"
                 android:text="invitations"
                 android:layout_gravity="right"
+                android:drawableTint="@color/white"
                 android:background="@drawable/button_border"/>
         </com.google.android.material.appbar.MaterialToolbar>
 

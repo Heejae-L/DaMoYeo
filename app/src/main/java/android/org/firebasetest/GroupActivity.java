@@ -202,6 +202,7 @@ public class GroupActivity extends AppCompatActivity {
             startActivity(intent);
         });
         findViewById(R.id.ViewMapButton).setOnClickListener(v -> startActivity(new Intent(this, MapActivity.class)));
+        findViewById(R.id.view_chat_button).setOnClickListener(v -> startChatActivity(group, userId));
     }
 
     private void startChatActivity(Group group, String userId) {

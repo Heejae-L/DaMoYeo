@@ -21,7 +21,17 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:navigationIcon="?android:attr/homeAsUpIndicator"
-            app:title="Group" />
+            app:title="Group">
+        <Button
+            android:id="@+id/view_chat_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_chat"
+            android:text="chat"
+            android:drawableTint="@color/white"
+            android:layout_gravity="right"
+            android:background="@drawable/button_border"/>
+        </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- SwipeRefreshLayout with all views inside -->
