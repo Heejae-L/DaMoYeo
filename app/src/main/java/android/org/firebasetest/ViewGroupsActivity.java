@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ViewGroupsActivity extends AppCompatActivity {
+    private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listViewGroups;
     private Button createGroupButton, viewInvitationsButton;
     private GroupManager groupManager;
@@ -59,8 +61,17 @@ public class ViewGroupsActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-
         groupManager = new GroupManager();
+
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadUserGroups();  // 그룹 정보를 새로 고침
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
         loadUserGroups();
 
         listViewGroups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -74,6 +85,8 @@ public class ViewGroupsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
         findViewById(R.id.addGroup).setOnClickListener(v -> startActivity(new Intent(this, CreateGroupActivity.class)));
 
         findViewById(R.id.view_invitations_button).setOnClickListener(v->startActivity(new Intent(this, ViewMyInvitationsActivity.class)));

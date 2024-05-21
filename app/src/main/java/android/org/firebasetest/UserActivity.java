@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +30,7 @@ public class UserActivity extends AppCompatActivity {
     private String userId;
     ProfileImageManager imageManager;
     private Button editProfileButton;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,8 @@ public class UserActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.top_app_bar);
         NavigationHelper.setupToolbar(toolbar, this);
+
+        mAuth = FirebaseAuth.getInstance();
 
         // Initialize SwipeRefreshLayout
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
@@ -56,6 +60,7 @@ public class UserActivity extends AppCompatActivity {
         textViewBio = findViewById(R.id.textViewBio);
         textViewGender = findViewById(R.id.textViewGender);
         imageViewProfile = findViewById(R.id.imageViewProfile);
+        findViewById(R.id.buttonLogout).setOnClickListener(v -> signOut());
         imageManager = new ProfileImageManager();
 
         // Get user ID from intent
@@ -106,5 +111,11 @@ public class UserActivity extends AppCompatActivity {
                 Toast.makeText(UserActivity.this, "Failed to load user data: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void signOut() {
+        mAuth.signOut(); // Firebase에서 로그아웃
+        Intent intent = new Intent(this, EmailLoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }
