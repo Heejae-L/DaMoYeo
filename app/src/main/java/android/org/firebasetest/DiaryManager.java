@@ -20,9 +20,6 @@ public class DiaryManager {
     public DatabaseReference getDatabase() {
         return database;
     }
-    public void saveMemo(Memo memo) {
-        database.child(memo.getMemoId()).setValue(memo);
-    }
     public void saveDiary(String userId,Diary diary) {
         database.child(userId).child(diary.getDiaryId()).setValue(diary);
     }

@@ -3,13 +3,13 @@ package android.org.firebasetest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -20,11 +20,10 @@ import java.util.List;
 
 public class ViewDiariesActivity extends AppCompatActivity {
 
-    private ListView listView;
+    private RecyclerView recyclerView;
     private DiaryManager diaryManager;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ArrayAdapter<Diary> adapter; // Adapter as a field to update later
-    private List<Diary> diaryList; // Store diaries list as a field
+    private DiaryAdapter adapter; // Adapter as a field to update later
     private String userId;
 
     @Override
@@ -35,42 +34,23 @@ public class ViewDiariesActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.top_app_bar);
         NavigationHelper.setupToolbar(toolbar, this);
 
-
-        listView = findViewById(R.id.listView);
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this)); // Set the layout manager
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)); // 구분선 추가
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         diaryManager = new DiaryManager();
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();  // 현재 사용자 ID 가져오기
 
-        setupDiaryListView();
+        loadDiaries(); // Initial load
         setupSwipeRefreshLayout();
         setupButton();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
-
-    }
-
-    private void setupDiaryListView() {
-        loadDiaries(); // Initial load
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Diary diary = diaryList.get(position);
-                Intent intent = new Intent(ViewDiariesActivity.this, DiaryActivity.class);
-                intent.putExtra("diary", diary); // Passing the Diary object
-                intent.putExtra("userId", userId);
-                startActivity(intent);
-            }
-        });
     }
 
     private void setupSwipeRefreshLayout() {
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshContent();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> refreshContent());
     }
 
     private void setupButton() {
@@ -82,9 +62,8 @@ public class ViewDiariesActivity extends AppCompatActivity {
         diaryManager.fetchDiaries(userId, new DiaryManager.DiariesCallback() {
             @Override
             public void onDiariesRetrieved(List<Diary> diaries) {
-                diaryList = diaries; // Save diaries
-                adapter = new DiaryAdapter(ViewDiariesActivity.this, R.layout.diary_list_item, diaries);
-                listView.setAdapter(adapter);
+                adapter = new DiaryAdapter(ViewDiariesActivity.this, diaries);
+                recyclerView.setAdapter(adapter);
             }
 
             @Override
@@ -98,10 +77,7 @@ public class ViewDiariesActivity extends AppCompatActivity {
         diaryManager.fetchDiaries(userId, new DiaryManager.DiariesCallback() {
             @Override
             public void onDiariesRetrieved(List<Diary> diaries) {
-                diaryList = diaries; // Update diaries
-                adapter.clear();
-                adapter.addAll(diaries);
-                adapter.notifyDataSetChanged();
+                adapter.updateDiaries(diaries); // Assumes updateDiaries method in adapter
                 swipeRefreshLayout.setRefreshing(false); // Stop the refreshing indicator
             }
 
