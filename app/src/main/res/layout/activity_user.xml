@@ -42,146 +42,154 @@
 
             <ImageView
                 android:id="@+id/imageViewProfile"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:src="@drawable/baseline_account_circle_24"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/textViewName"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"/>
 
             <TextView
                 android:id="@+id/Name"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:text="Name"
-                android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toTopOf="@id/textViewName"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageViewProfile"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageViewProfile"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5" />
 
             <TextView
                 android:id="@+id/textViewName"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/Name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
                 android:id="@+id/Email"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="18sp"
+                android:textColor="#333333"
                 android:textStyle="bold"
                 android:text="Email"
-                android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toTopOf="@id/textViewEmail"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewName"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewName"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                android:layout_marginTop="16dp"/>
 
             <TextView
                 android:id="@+id/textViewEmail"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="#666666"
+                app:layout_constraintTop_toBottomOf="@id/Email"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/Email"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
 
             <TextView
                 android:id="@+id/Age"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="18sp"
+                android:textColor="#333333"
                 android:textStyle="bold"
                 android:text="Age"
-                android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toTopOf="@id/textViewAge"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewEmail"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewEmail"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                android:layout_marginTop="16dp"/>
 
             <TextView
                 android:id="@+id/textViewAge"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="#666666"
+                app:layout_constraintTop_toBottomOf="@id/Age"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/Age"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
 
             <TextView
                 android:id="@+id/Gender"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="18sp"
+                android:textColor="#333333"
                 android:textStyle="bold"
                 android:text="Gender"
-                android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toTopOf="@id/textViewGender"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewAge"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewAge"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                android:layout_marginTop="16dp"/>
 
             <TextView
                 android:id="@+id/textViewGender"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="#666666"
+                app:layout_constraintTop_toBottomOf="@id/Gender"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/Gender"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
 
             <TextView
                 android:id="@+id/Bio"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="18sp"
+                android:textColor="#333333"
                 android:textStyle="bold"
                 android:text="Bio"
-                android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toTopOf="@id/textViewBio"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewGender"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewGender"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                android:layout_marginTop="16dp"/>
 
             <TextView
                 android:id="@+id/textViewBio"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toTopOf="@id/buttonEditProfile"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="#666666"
+                app:layout_constraintTop_toBottomOf="@id/Bio"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/Bio"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
+
 
             <Button
                 android:id="@+id/buttonEditProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit Profile"
                 android:layout_marginTop="16dp"
+                android:text="Edit Profile"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewBio"/>
+                app:layout_constraintTop_toBottomOf="@id/textViewBio" />
+
             <Button
                 android:id="@+id/buttonLogout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Logout"
                 android:layout_marginTop="16dp"
+                android:text="Logout"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/buttonEditProfile"

@@ -55,19 +55,31 @@ public class EmailLoginActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // 로그인 성공
-                        Toast.makeText(EmailLoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                         FirebaseUser user = mAuth.getCurrentUser();  // 현재 로그인한 사용자 가져오기
 
                         if (user != null) {
-                            String userId = user.getUid();  // 사용자 ID 가져오기
-                            Intent intent = new Intent(EmailLoginActivity.this, MainActivity.class);
-                            intent.putExtra("userId", userId);  // 인텐트에 사용자 ID 추가
-                            startActivity(intent);  // MainActivity 시작
-                            finish();  // 현재 액티비티 종료
+                            if (user.isEmailVerified()||!user.isEmailVerified()) {
+                                // 이메일 인증이 완료된 경우
+                                Toast.makeText(EmailLoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                                String userId = user.getUid();  // 사용자 ID 가져오기
+                                Intent intent = new Intent(EmailLoginActivity.this, MainActivity.class);
+                                intent.putExtra("userId", userId);  // 인텐트에 사용자 ID 추가
+                                startActivity(intent);  // MainActivity 시작
+                                finish();  // 현재 액티비티 종료
+                            } else {
+                                // 이메일 인증이 완료되지 않은 경우
+                                Toast.makeText(EmailLoginActivity.this, "Please verify your email address.", Toast.LENGTH_LONG).show();
+                                mAuth.signOut();  // 이메일 인증이 완료되지 않으면 로그아웃
+                            }
                         }
                     } else {
                         // 로그인 실패
@@ -75,6 +87,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
 
     private void createUser() {

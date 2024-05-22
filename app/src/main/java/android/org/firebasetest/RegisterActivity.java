@@ -67,18 +67,31 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser firebaseUser = mAuth.getCurrentUser(); // 현재 로그인한 사용자 가져오기
+                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         if (firebaseUser != null) {
-                            String userId = firebaseUser.getUid();
-                            // Firebase에 사용자 정보를 저장합니다.
-                            User user = new User(userId, name, email, Integer.parseInt(age),null,"Male" ,null); // 나이는 예시로 0으로 설정
-                            userManager.saveUser(user);
-                            Toast.makeText(RegisterActivity.this, "User registration successful", Toast.LENGTH_SHORT).show();
-                            finish(); // 활동 종료
+                            firebaseUser.sendEmailVerification()
+                                    .addOnCompleteListener(emailVerificationTask -> {
+                                        if (emailVerificationTask.isSuccessful()) {
+                                            Toast.makeText(RegisterActivity.this, "Verification email sent. Please check your email.", Toast.LENGTH_LONG).show();
+
+                                            String userId = firebaseUser.getUid();
+                                            User user = new User(userId, name, email, Integer.parseInt(age), null, "Male", null);
+                                            userManager.saveUser(user);
+
+                                            // Optionally, sign out the user to prevent them from being logged in before verification
+                                            mAuth.signOut();
+
+                                            // Finish the activity and prompt the user to verify their email
+                                            finish();
+                                        } else {
+                                            Toast.makeText(RegisterActivity.this, "Failed to send verification email.", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
                         }
                     } else {
                         Toast.makeText(RegisterActivity.this, "Registration failed: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
     }
+
 }

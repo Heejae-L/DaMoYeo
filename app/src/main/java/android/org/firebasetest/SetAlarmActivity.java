@@ -75,6 +75,7 @@ public class SetAlarmActivity extends AppCompatActivity {
         if(c.before(Calendar.getInstance())){
             c.add(Calendar.DATE, 1);
         }
+        Log.e("SetAlarmActivity",pendingIntent.toString());
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
 
