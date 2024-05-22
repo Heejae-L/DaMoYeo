@@ -23,7 +23,17 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:navigationIcon="?android:attr/homeAsUpIndicator"
-            app:title="Diary" />
+            app:title="Diaries">
+            <Button
+                android:id="@+id/btnSetAlarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_timer"
+                android:layout_gravity="right"
+                android:text="alarm"
+                android:drawableTint="@color/white"
+                android:background="@drawable/button_border"/>
+        </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- List View inside SwipeRefreshLayout -->

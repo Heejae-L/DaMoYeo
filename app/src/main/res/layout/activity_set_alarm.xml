@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".SetAlarmActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Alarm set"
+        android:textSize="30sp"/>
+
+    <!-- TimePicker to select the alarm time -->
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:timePickerMode="spinner" />
+
+    <!-- Button to set the alarm -->
+    <Button
+        android:id="@+id/btnSetAlarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set Alarm"
+        android:layout_marginTop="16dp" />
+
+    <!-- Button to cancel the setting process -->
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:layout_marginTop="8dp" />
+</LinearLayout>

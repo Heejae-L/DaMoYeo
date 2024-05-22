@@ -43,7 +43,7 @@ public class ViewDiariesActivity extends AppCompatActivity {
 
         setupDiaryListView();
         setupSwipeRefreshLayout();
-        setupWriteDiaryButton();
+        setupButton();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
@@ -73,8 +73,9 @@ public class ViewDiariesActivity extends AppCompatActivity {
         });
     }
 
-    private void setupWriteDiaryButton() {
+    private void setupButton() {
         findViewById(R.id.writeDiary).setOnClickListener(v -> startActivity(new Intent(ViewDiariesActivity.this, WriteDiaryActivity.class)));
+        findViewById(R.id.btnSetAlarm).setOnClickListener(v -> startActivity(new Intent(ViewDiariesActivity.this, SetAlarmActivity.class)));
     }
 
     private void loadDiaries() {
