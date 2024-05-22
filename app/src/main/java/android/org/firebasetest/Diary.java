@@ -7,6 +7,7 @@ public class Diary implements Parcelable {
     private String diaryId;
     private String authorId;
     private String date;
+    private String title;
     private String weather;
     private String feeling;
     private String location;
@@ -19,10 +20,11 @@ public class Diary implements Parcelable {
     }
 
     // 모든 필드를 포함하는 생성자
-    public Diary(String diaryId, String authorId, String date, String weather, String feeling, String location, String image, String voice, String content) {
+    public Diary(String diaryId, String authorId, String date,String title, String weather, String feeling, String location, String image, String voice, String content) {
         this.diaryId = diaryId;
         this.authorId = authorId;
         this.date = date;
+        this.title = title;
         this.weather = weather;
         this.feeling = feeling;
         this.location = location;
@@ -36,6 +38,7 @@ public class Diary implements Parcelable {
         diaryId = in.readString();
         authorId = in.readString();
         date = in.readString();
+        title = in.readString();
         weather = in.readString();
         feeling = in.readString();
         location = in.readString();
@@ -66,6 +69,7 @@ public class Diary implements Parcelable {
         dest.writeString(diaryId);
         dest.writeString(authorId);
         dest.writeString(date);
+        dest.writeString(title);
         dest.writeString(weather);
         dest.writeString(feeling);
         dest.writeString(location);
@@ -98,6 +102,10 @@ public class Diary implements Parcelable {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public String getTitle() {return title;}
+
+    public void setTitle(String title) {this.title = title;}
 
     public String getWeather() {
         return weather;

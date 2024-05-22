@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 public class Memo implements Parcelable {
     private String memoId;
+    private String title;
     private String feeling;
     private String date;
     private String bodyText;
@@ -18,8 +19,9 @@ public class Memo implements Parcelable {
     public Memo() {
     }
 
-    public Memo(String memoId, String feeling, String date, String bodyText, String image, String authorId, String groupId, String weather) {
+    public Memo(String memoId, String title, String feeling, String date, String bodyText, String image, String authorId, String groupId, String weather) {
         this.memoId = memoId;
+        this.title = title;
         this.feeling = feeling;
         this.date = date;
         this.bodyText = bodyText;
@@ -31,6 +33,7 @@ public class Memo implements Parcelable {
 
     protected Memo(Parcel in) {
         memoId = in.readString();
+        title = in.readString();
         feeling = in.readString();
         date = in.readString();
         bodyText = in.readString();
@@ -59,6 +62,7 @@ public class Memo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(memoId);
+        dest.writeString(title);
         dest.writeString(feeling);
         dest.writeString(date);
         dest.writeString(bodyText);
@@ -71,6 +75,8 @@ public class Memo implements Parcelable {
     // Getters and setters
     public String getMemoId() { return memoId; }
     public void setMemoId(String memoId) { this.memoId = memoId; }
+    public String getTitle() {return title;}
+    public void setTitle(String title) {this.title = title;}
     public String getFeeling() { return feeling; }
     public void setFeeling(String feeling) { this.feeling = feeling; }
     public String getDate() { return date; }

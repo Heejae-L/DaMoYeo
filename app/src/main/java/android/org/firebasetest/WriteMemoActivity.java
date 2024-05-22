@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -20,7 +21,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class WriteMemoActivity extends AppCompatActivity {
-    private EditText editTextFeeling, editTextBodyText, editTextWeather;
+    private EditText editTextTitle, editTextDate, editTextFeeling, editTextBodyText, editTextWeather;
     private Button buttonSaveMemo;
     private MemoManager memoManager;
     private Group group;
@@ -32,25 +33,19 @@ public class WriteMemoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_memo);
 
-        // 뒤로가기
-        MaterialToolbar toolbar = findViewById(R.id.top_app_bar);
-        setSupportActionBar(toolbar);  // Toolbar를 액티비티의 앱 바로 설정합니다.
-
-        // 뒤로가기 버튼 클릭 리스너 설정
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 뒤로가기 버튼이 클릭되면 현재 액티비티를 종료합니다.
-                finish();
-            }
-        });
+        Toolbar toolbar = findViewById(R.id.top_app_bar);
+        NavigationHelper.setupToolbar(toolbar, this);
 
         // Initialize views and Firebase components
+        editTextTitle = findViewById(R.id.editTextTitle);
+        editTextDate = findViewById(R.id.editTextDate);
         editTextFeeling = findViewById(R.id.editTextFeeling);
         editTextWeather = findViewById(R.id.editTextWeather);
         editTextBodyText = findViewById(R.id.editTextBodyText);
         buttonSaveMemo = findViewById(R.id.buttonSaveMemo);
         memoManager = new MemoManager();
+
+        editTextDate.setText(getCurrentDate());
 
         // Get current user ID
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -77,6 +72,8 @@ public class WriteMemoActivity extends AppCompatActivity {
     }
 
     private void saveMemo() {
+        String title = editTextTitle.getText().toString().trim();
+        String date = editTextDate.getText().toString().trim();
         String feeling = editTextFeeling.getText().toString().trim();
         String bodyText = editTextBodyText.getText().toString().trim();
         String weather = editTextWeather.getText().toString().trim();
@@ -88,7 +85,7 @@ public class WriteMemoActivity extends AppCompatActivity {
         }
 
         // Create a new Memo object with the provided data
-        Memo memo = new Memo(memoId, feeling, getCurrentDate(), bodyText, null, userId, groupId, weather);
+        Memo memo = new Memo(memoId, title, feeling, date, bodyText, null, userId, groupId, weather);
         Log.d("Memo","Memo:"+memo.getGroupId()+groupId);
 
         // Save the memo to the database

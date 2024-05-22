@@ -25,14 +25,25 @@
             app:title="Write Diary" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Title EditText -->
+    <EditText
+        android:id="@+id/editTextTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Title"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+
     <EditText
         android:id="@+id/editTextDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Date"
+        app:layout_constraintTop_toBottomOf="@id/editTextTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         app:layout_constraintBottom_toTopOf="@id/editTextWeather"/>
 
     <EditText
@@ -41,7 +52,6 @@
         android:layout_height="wrap_content"
         android:hint="Weather"
         app:layout_constraintTop_toBottomOf="@id/editTextDate"
-        app:layout_constraintBottom_toTopOf="@id/editTextFeeling"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -51,7 +61,6 @@
         android:layout_height="wrap_content"
         android:hint="Feeling"
         app:layout_constraintTop_toBottomOf="@id/editTextWeather"
-        app:layout_constraintBottom_toTopOf="@id/editTextLocation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -61,7 +70,6 @@
         android:layout_height="wrap_content"
         android:hint="Location"
         app:layout_constraintTop_toBottomOf="@id/editTextFeeling"
-        app:layout_constraintBottom_toTopOf="@id/editTextContent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -84,19 +92,7 @@
         android:layout_height="wrap_content"
         android:text="Save Diary"
         app:layout_constraintTop_toBottomOf="@id/editTextContent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <!-- Bottom Navigation -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/bottom_nav_menu"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

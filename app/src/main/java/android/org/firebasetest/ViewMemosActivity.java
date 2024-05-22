@@ -10,6 +10,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -19,9 +22,9 @@ import java.util.List;
 
 public class ViewMemosActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ListView listViewMemos;
+    private RecyclerView recyclerView;
     private Button writeMemoButton, deleteMemoButton;
-    private ArrayAdapter<String> memoAdapter;
+    private MemoAdapter memoAdapter;
     private List<Memo> memos;
     private MemoManager memoManager;
     private Group group;
@@ -36,11 +39,11 @@ public class ViewMemosActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.top_app_bar);
         NavigationHelper.setupToolbar(toolbar, this);
 
+        recyclerView = findViewById(R.id.recyclerViewMemos);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this)); // Set the layout manager
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)); // 구분선 추가
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
-        listViewMemos = findViewById(R.id.listViewMemos);
         memos = new ArrayList<>();
-        memoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
-        listViewMemos.setAdapter(memoAdapter);
 
         memoManager = new MemoManager();
         group = getIntent().getParcelableExtra("group");
@@ -54,13 +57,6 @@ public class ViewMemosActivity extends AppCompatActivity {
             finish();
         }
 
-        listViewMemos.setOnItemClickListener((parent, view, position, id) -> {
-            Memo selectedMemo = memos.get(position);
-            Intent intent = new Intent(ViewMemosActivity.this, MemoActivity.class);
-            intent.putExtra("memo", selectedMemo); // Passing the selected Memo object to MemoActivity
-            startActivity(intent);
-        });
-
         swipeRefreshLayout.setOnRefreshListener(this::refreshMemos);
 
         writeMemoButton = findViewById(R.id.writeMemoButton);
@@ -70,10 +66,6 @@ public class ViewMemosActivity extends AppCompatActivity {
             intent.putExtra("userId", userId);
             startActivity(intent);
         });
-
-        deleteMemoButton = findViewById(R.id.deleteMemoButton);
-        // Setup delete button if necessary
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);
     }
@@ -83,13 +75,9 @@ public class ViewMemosActivity extends AppCompatActivity {
             memoManager.fetchMemosByGroupId(groupId, new MemoManager.MemosCallback() {
                 @Override
                 public void onMemosRetrieved(List<Memo> retrievedMemos) {
-                    memos.clear();
-                    memoAdapter.clear();
-                    for (Memo memo : retrievedMemos) {
-                        memos.add(memo);
-                        memoAdapter.add(memo.getDate() + " - " + memo.getFeeling() + ": " + memo.getBodyText());
-                    }
-                    memoAdapter.notifyDataSetChanged();
+                    memoAdapter = new MemoAdapter(ViewMemosActivity.this, memos);
+                    recyclerView.setAdapter(memoAdapter);
+                    memoAdapter.updateMemos(retrievedMemos);
                     swipeRefreshLayout.setRefreshing(false);
                 }
 

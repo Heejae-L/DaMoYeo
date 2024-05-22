@@ -36,12 +36,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ListView
-            android:id="@+id/listViewMemos"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@android:color/darker_gray"
-            android:dividerHeight="1dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewMemos"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:divider="@android:color/darker_gray"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <!-- Button Layout -->
@@ -61,13 +60,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Write" />
-
-        <Button
-            android:id="@+id/deleteMemoButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Delete" />
     </LinearLayout>
 
     <!-- Bottom Navigation -->

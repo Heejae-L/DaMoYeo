@@ -14,62 +14,57 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-
-
-public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHolder> {
+public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.MemoViewHolder> {
     private Context context;
-    private List<Diary> diaries;
-    private DiaryManager diaryManager = new DiaryManager();
+    private List<Memo> memos;
+    private MemoManager memoManager = new MemoManager();
 
-    public DiaryAdapter(Context context, List<Diary> diaries) {
+    public MemoAdapter(Context context, List<Memo> memos) {
         this.context = context;
-        this.diaries = diaries;
+        this.memos = memos;
     }
 
     @NonNull
     @Override
-    public DiaryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.diary_list_item, parent, false);
-        return new DiaryViewHolder(view);
+    public MemoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.memo_list_item, parent, false);
+        return new MemoViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DiaryViewHolder holder, int position) {
-        Diary diary = diaries.get(position);
-        holder.textViewDate.setText(diary.getDate());
-        holder.textViewTitle.setText(diary.getTitle());
-        holder.textViewFeeling.setText(diary.getFeeling());
+    public void onBindViewHolder(@NonNull MemoViewHolder holder, int position) {
+        Memo memo = memos.get(position);
+        holder.textViewDate.setText(memo.getDate());
+        holder.textViewTitle.setText(memo.getTitle());
     }
 
     @Override
     public int getItemCount() {
-        return diaries.size();
+        return memos.size();
     }
 
-    public void updateDiaries(List<Diary> newDiaries) {
-        diaries.clear();
-        diaries.addAll(newDiaries);
+    public void updateMemos(List<Memo> newMemos) {
+        memos.clear();
+        memos.addAll(newMemos);
         notifyDataSetChanged();
     }
 
-    class DiaryViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewDate, textViewTitle, textViewFeeling;
+    class MemoViewHolder extends RecyclerView.ViewHolder {
+        TextView textViewDate, textViewTitle;
 
-        public DiaryViewHolder(View itemView) {
+        public MemoViewHolder(View itemView) {
             super(itemView);
             textViewDate = itemView.findViewById(R.id.text_view_date);
             textViewTitle = itemView.findViewById(R.id.text_view_title);
-            textViewFeeling = itemView.findViewById(R.id.text_view_feeling);
 
-            // 아이템 클릭 리스너 설정
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        Diary diary = diaries.get(position);
-                        Intent intent = new Intent(context, DiaryActivity.class);
-                        intent.putExtra("diary", diary);  // 다이어리 객체 전달
+                        Memo memo = memos.get(position);
+                        Intent intent = new Intent(context, MemoActivity.class); // Change this if MemoActivity exists
+                        intent.putExtra("memo", memo);  // Passing the Memo object
                         context.startActivity(intent);
                     }
                 }
@@ -89,28 +84,24 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                Diary diaryToDelete = diaries.get(position);
-
-                // Show confirmation dialog
-                showDeleteDialog(diaryToDelete, position);
+                Memo memoToDelete = memos.get(position);
+                showDeleteDialog(memoToDelete, position);
             }
         }).attachToRecyclerView(recyclerView);
     }
 
-    private void showDeleteDialog(Diary diary, int position) {
-        // AlertDialog for confirmation
+    private void showDeleteDialog(Memo memo, int position) {
         new AlertDialog.Builder(context)
                 .setTitle("Confirm Delete")
-                .setMessage("Are you sure you want to delete this diary?")
-                .setPositiveButton("Delete", (dialog, which) -> deleteDiary(diary, position))
+                .setMessage("Are you sure you want to delete this memo?")
+                .setPositiveButton("Delete", (dialog, which) -> deleteMemo(memo, position))
                 .setNegativeButton("Cancel", (dialog, which) -> notifyItemChanged(position))
                 .create().show();
     }
 
-    private void deleteDiary(Diary diary, int position) {
-        diaries.remove(position);
+    private void deleteMemo(Memo memo, int position) {
+        memos.remove(position);
         notifyItemRemoved(position);
-        diaryManager.deleteDiary(diary.getAuthorId(),diary.getDiaryId()); // Assuming DiaryManager has a method to delete diary from DB
+        memoManager.deleteMemo(memo.getMemoId()); // Make sure this method exists in your MemoManager
     }
-
 }

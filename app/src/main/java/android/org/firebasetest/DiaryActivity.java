@@ -72,7 +72,7 @@ public class DiaryActivity extends AppCompatActivity {
     }
 
     private void displayDiary(Diary diary) {
-        titleTextView.setText(diary.getDate()); // assuming title is date for simplicity
+        titleTextView.setText(diary.getTitle()); // assuming title is date for simplicity
         dateTextView.setText(diary.getDate());
         feelingTextView.setText("Feeling: " + diary.getFeeling());
         locationTextView.setText("Location: " + diary.getLocation());

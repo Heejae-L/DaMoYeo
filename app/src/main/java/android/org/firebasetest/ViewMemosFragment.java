@@ -61,7 +61,7 @@ public class ViewMemosFragment extends Fragment {
                 memoAdapter.clear();
                 for (Memo memo : retrievedMemos) {
                     memos.add(memo);
-                    memoAdapter.add(memo.getDate() + " - " + memo.getBodyText());
+                    memoAdapter.add(memo.getDate() + " - " + memo.getTitle());
                 }
                 memoAdapter.notifyDataSetChanged();
             }

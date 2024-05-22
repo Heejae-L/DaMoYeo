@@ -2,17 +2,19 @@ package android.org.firebasetest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class MemoActivity extends AppCompatActivity {
-    private TextView textViewDate, textViewAuthor, textViewFeeling, textViewBodyText, textViewWeather;
+    private TextView textViewTitle, textViewDate, textViewAuthor, textViewFeeling, textViewBodyText, textViewWeather;
     private Button buttonEditMemo;
     private UserManager userManager;
 
@@ -21,21 +23,12 @@ public class MemoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memo);
 
-        // 뒤로가기
-        MaterialToolbar toolbar = findViewById(R.id.top_app_bar);
-        setSupportActionBar(toolbar);  // Toolbar를 액티비티의 앱 바로 설정합니다.
-
-        // 뒤로가기 버튼 클릭 리스너 설정
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 뒤로가기 버튼이 클릭되면 현재 액티비티를 종료합니다.
-                finish();
-            }
-        });
+        Toolbar toolbar = findViewById(R.id.top_app_bar);
+        NavigationHelper.setupToolbar(toolbar, this);
 
         userManager = new UserManager();
 
+        textViewTitle = findViewById(R.id.textViewTitle);
         textViewDate = findViewById(R.id.textViewDate);
         textViewAuthor = findViewById(R.id.textViewAuthor);
         textViewFeeling = findViewById(R.id.textViewFeeling);
@@ -44,11 +37,13 @@ public class MemoActivity extends AppCompatActivity {
         buttonEditMemo = findViewById(R.id.buttonEditMemo);
 
         Memo memo = getIntent().getParcelableExtra("memo");
+        Log.d("MemoActivity","memo: " + memo);
 
         if (memo != null) {
+            textViewTitle.setText(memo.getTitle());
             textViewDate.setText("Date: " + memo.getDate());
             textViewFeeling.setText("Feeling: " + memo.getFeeling());
-            textViewBodyText.setText("Content: " + memo.getBodyText());
+            textViewBodyText.setText(memo.getBodyText());
             textViewWeather.setText("Weather: " + memo.getWeather());
 
             if (memo.getAuthorId() != null) {
