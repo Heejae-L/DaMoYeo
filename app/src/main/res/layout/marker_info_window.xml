@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@drawable/bg_custom_info_window">
+
+    <EditText
+        android:id="@+id/title"
+        android:layout_width="159dp"
+        android:layout_height="wrap_content"
+        android:hint="Title"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/date_info"
+        android:layout_width="159dp"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:hint="Date" />
+
+    <EditText
+        android:id="@+id/additional_info"
+        android:layout_width="158dp"
+        android:layout_height="wrap_content"
+        android:hint="Additional information" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/add_button"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:text="Add"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/delete_button"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:text="Delete"
+            android:textSize="10sp" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

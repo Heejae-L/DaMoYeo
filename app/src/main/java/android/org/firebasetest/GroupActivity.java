@@ -201,7 +201,13 @@ public class GroupActivity extends AppCompatActivity {
             intent.putExtra("userId", userId);
             startActivity(intent);
         });
-        findViewById(R.id.ViewMapButton).setOnClickListener(v -> startActivity(new Intent(this, MapActivity.class)));
+        Button ViewMapButton = findViewById(R.id.ViewMapButton);
+        ViewMapButton.setOnClickListener(v -> {
+            Intent intent = new Intent(GroupActivity.this, MapActivity.class);
+            intent.putExtra("group", group);
+            intent.putExtra("userId", userId);
+            startActivity(intent);
+        });
         findViewById(R.id.view_chat_button).setOnClickListener(v -> startChatActivity(group, userId));
     }
 
