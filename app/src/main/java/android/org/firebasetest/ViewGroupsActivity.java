@@ -7,14 +7,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,42 +30,37 @@ import java.util.Map;
 
 public class ViewGroupsActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ListView listViewGroups;
-    private Button createGroupButton, viewInvitationsButton;
+    private RecyclerView recyclerView;
     private GroupManager groupManager;
-    private ArrayAdapter<String> adapter;
+    private GroupAdapter groupAdapter;
     private List<Group> groups;
     private FirebaseAuth mAuth;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_groups);
 
-        // 이 부분을 추가합니다.
-        MaterialToolbar toolbar = findViewById(R.id.top_app_bar);
-        setSupportActionBar(toolbar);  // Toolbar를 액티비티의 앱 바로 설정합니다.
-
-        // 뒤로가기 버튼 클릭 리스너 설정
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 뒤로가기 버튼이 클릭되면 현재 액티비티를 종료합니다.
-                finish();
-            }
-        });
-
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        listViewGroups = findViewById(R.id.listViewGroups);
-        groups = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
-        listViewGroups.setAdapter(adapter);
+        Toolbar toolbar = findViewById(R.id.top_app_bar);
+        NavigationHelper.setupToolbar(toolbar, this);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        groupAdapter = new GroupAdapter(ViewGroupsActivity.this, groups);
+        recyclerView = findViewById(R.id.recyclerViewGroups);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this)); // Set the layout manager
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)); // 구분선 추가
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        groups = new ArrayList<>();
+        groupAdapter = new GroupAdapter(ViewGroupsActivity.this, groups);
+        recyclerView.setAdapter(groupAdapter); // Set adapter before fetching data
         groupManager = new GroupManager();
 
-        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+
+        loadUserGroups();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -72,23 +69,7 @@ public class ViewGroupsActivity extends AppCompatActivity {
             }
         });
 
-        loadUserGroups();
-
-        listViewGroups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Group group = groups.get(position);
-                Intent intent = new Intent(ViewGroupsActivity.this, GroupActivity.class);
-                intent.putExtra("group", group); // Passing the Group object
-                intent.putExtra("user", user);
-                intent.putExtra("userId", user.getUid());
-                startActivity(intent);
-            }
-        });
-
-
         findViewById(R.id.addGroup).setOnClickListener(v -> startActivity(new Intent(this, CreateGroupActivity.class)));
-
         findViewById(R.id.view_invitations_button).setOnClickListener(v->startActivity(new Intent(this, ViewMyInvitationsActivity.class)));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -97,39 +78,34 @@ public class ViewGroupsActivity extends AppCompatActivity {
     }
 
     private void loadUserGroups() {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Log.d("ViewGroupActivity", "Loading groups for user ID: " + userId); // 사용자 ID 로그
-
         groupManager.fetchGroupsForUser(userId, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                groups.clear();
-                adapter.clear();
+                if (!dataSnapshot.exists()) {
+                    Log.e("DataFetch", "No data found");
+                    groups.clear(); // Optionally clear the list if no groups are found
+                    groupAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
+                    return;
+                }
+
+                groups.clear(); // Clear existing group data
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Group group = snapshot.getValue(Group.class);
                     if (group != null) {
                         groups.add(group);
-                        adapter.add(group.getTitle() + " - " + group.getDescription());
-                        Log.d("ViewGroupActivity", "Group loaded: " + group.getTitle() + " - " + group.getDescription()); // 각 그룹 로드 로그
-
-                        // 멤버 ID 리스트 로그
-                        Map<String, Boolean> memberIds = group.getMemberIds();
-                        if (memberIds != null && !memberIds.isEmpty()) {
-                            Log.d("ViewGroupActivity", "Members of " + group.getTitle() + ": " + memberIds.keySet().toString());
-                        } else {
-                            Log.d("ViewGroupActivity", "No members found in " + group.getTitle());
-                        }
-
+                        Log.e("loadUserGroups", "group title: " + group.getTitle());
                     }
                 }
-                adapter.notifyDataSetChanged();
+                groupAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(ViewGroupsActivity.this, "Failed to load groups: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("ViewGroupActivity", "Failed to load groups: " + databaseError.getMessage()); // 로드 실패 로그
+                Log.e("FirebaseError", "Error fetching data: " + databaseError.getMessage());
             }
         });
     }
+
+
 }
