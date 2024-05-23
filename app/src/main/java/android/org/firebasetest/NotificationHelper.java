@@ -3,10 +3,14 @@ package android.org.firebasetest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.app.PendingIntent;
+import android.content.Intent;
 
 import androidx.core.app.NotificationCompat;
 
@@ -60,11 +64,24 @@ public class NotificationHelper extends ContextWrapper {
     }
 
     public NotificationCompat.Builder getChannel1Notification(String title, String message){
+        // Create an Intent for the activity you want to start
+        Intent resultIntent = new Intent(this, ViewDiariesActivity.class);
+        // Create the PendingIntent
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(
+                this,
+                0, // Request code, can be any integer
+                resultIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT // Use appropriate flag to update current or create new one
+        );
+        // Build the notification
         return new NotificationCompat.Builder(getApplicationContext(), channel1ID)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setSmallIcon(R.drawable.ic_home);
+                .setSmallIcon(R.drawable.ic_home)
+                .setContentIntent(resultPendingIntent) // Set the Intent to be launched when the notification is clicked
+                .setAutoCancel(true); // Notification will disappear after clicking on it
     }
+
 
     public NotificationCompat.Builder getChannel2Notification(String title, String message){
         return new NotificationCompat.Builder(getApplicationContext(), channel2ID)

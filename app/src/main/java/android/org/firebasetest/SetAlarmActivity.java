@@ -65,19 +65,21 @@ public class SetAlarmActivity extends AppCompatActivity {
     }
 
     @SuppressLint("ScheduleExactAlarm")
-    private void startAlarm(Calendar c){
+    private void startAlarm(Calendar c) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
         intent.putExtra("title", "다이어리");
         intent.putExtra("message", "다이어리를 작성할 시간입니다.");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if(c.before(Calendar.getInstance())){
-            c.add(Calendar.DATE, 1);
+        if (c.before(Calendar.getInstance())) {
+            c.add(Calendar.DATE, 1);  // This ensures the alarm is set for the next day if the time has already passed today
         }
-        Log.e("SetAlarmActivity",pendingIntent.toString());
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+
+        // Set the repeating alarm
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
+
 
     private void cancelAlarm(){
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
