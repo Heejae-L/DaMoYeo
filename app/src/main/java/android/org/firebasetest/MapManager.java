@@ -20,12 +20,14 @@ public class MapManager {
         database = FirebaseDatabase.getInstance().getReference("groups").child(group.getGroupId()).child("maps");
     }
 
+
     public DatabaseReference getDatabase() {
         return database;
     }
 
     public void saveMap(Group group, Map map) {
         database.child(map.getMapId()).setValue(map);
+        Log.d("saveMap","Map:"+map.getMaptitle());
     }
 
     public void deleteMap(String mapId) {
@@ -53,6 +55,27 @@ public class MapManager {
             }
         });
     }
+
+    // MapManager 클래스에 메소드 추가
+    public void fetchMapById(String mapId, MapCallback callback) {
+        database.child(mapId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map map = dataSnapshot.getValue(Map.class);
+                if (map != null) {
+                    callback.onMapRetrieved(map);
+                } else {
+                    callback.onError(new Exception("Map not found"));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onError(databaseError.toException());
+            }
+        });
+    }
+
 
     public interface MapsCallback {
         void onMapsRetrieved(List<Map> maps);

@@ -15,7 +15,7 @@ public class Map implements Parcelable {
     private double longitude;
     private String groupId;
 
-   public Map(){}
+    public Map(){}
     public Map(String MapId, String Maptitle, String Mapdate, String Mapinfo, double latitude, double longitude, String groupId) {
         this.MapId = MapId;
         this.Maptitle = Maptitle;
@@ -36,7 +36,7 @@ public class Map implements Parcelable {
         groupId = in.readString();
     }
 
-    public static final Parcelable.Creator<Map> CREATOR = new Parcelable.Creator<Map>() {
+    public static final Creator<Map> CREATOR = new Creator<Map>() {
         @Override
         public Map createFromParcel(Parcel in) {
             return new Map(in);
@@ -67,14 +67,16 @@ public class Map implements Parcelable {
     public String getMapId() { return MapId; }
     public void setMapId(String MapId) { this.MapId = MapId; }
     public String getMaptitle() { return Maptitle; }
-    public void setMaptitle(String memoId) { this.Maptitle = Maptitle; }
+    public void setMaptitle(String Maptitle) { this.Maptitle = Maptitle; }
     public String getMapdate() { return Mapdate; }
-    public void setMapdate(String memoId) { this.Mapdate = Mapdate; }
+    public void setMapdate(String Mapdate) { this.Mapdate = Mapdate; }
     public String getMapinfo() { return Mapinfo; }
     public void setMapinfo(String Mapinfo) { this.Mapinfo = Mapinfo; }
     public Double getLatitude(){return latitude;}
     public void setLatitude(Double latitude){this.latitude = latitude;}
     public Double getLongitude(){return longitude;}
     public void setLongitude(Double longitude){this.longitude = longitude;}
+
+
 
 }
