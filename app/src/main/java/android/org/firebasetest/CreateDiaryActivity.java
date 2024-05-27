@@ -81,8 +81,8 @@ public class CreateDiaryActivity extends AppCompatActivity {
     private int selectedMoodImageId = 0; // 기본값으로 0 설정
     public ImageView selectedWeatherImageView;
     public ImageView selectedMoodImageView;
-    public int[] weatherImageIds = {R.drawable.weather1, R.drawable.weather2, R.drawable.weather3, R.drawable.weather4};
-    public int[] moodImageIds = {R.drawable.icon_draw, R.drawable.mood2, R.drawable.mood3, R.drawable.mood4};
+    public int[] weatherImageIds = {R.drawable.sun, R.drawable.daytime, R.drawable.wind, R.drawable.snow,R.drawable.rain};
+    public int[] moodImageIds = {R.drawable.smile, R.drawable.happy, R.drawable.sad, R.drawable.angry,R.drawable.bored,R.drawable.sick};
 
     //voice 관련
     public VoiceHandler voiceHandler;
