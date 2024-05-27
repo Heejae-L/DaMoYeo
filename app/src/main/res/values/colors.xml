@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="Primary">#FF203751</color>
+    <color name="Secondary">#FFDCD9C2</color>
+    <color name="colorAccent">#FFDCD9C2</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>

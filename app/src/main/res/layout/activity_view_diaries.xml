@@ -74,7 +74,7 @@
             android:layout_weight="1"
             android:text="Write" />
     </LinearLayout>
-
+ㅃㅂ
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
