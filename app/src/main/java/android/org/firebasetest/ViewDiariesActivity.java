@@ -2,6 +2,7 @@ package android.org.firebasetest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -25,25 +27,34 @@ public class ViewDiariesActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private DiaryAdapter adapter; // Adapter as a field to update later
     private String userId;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_diaries);
 
-        Toolbar toolbar = findViewById(R.id.top_app_bar);
-        NavigationHelper.setupToolbar(toolbar, this);
+        // Firebase 초기화
+        if (FirebaseApp.getApps(this).isEmpty()) {
+            FirebaseApp.initializeApp(this);
+        }
+        mAuth = FirebaseAuth.getInstance();
 
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this)); // Set the layout manager
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)); // 구분선 추가
-        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
-        diaryManager = new DiaryManager();
-        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();  // 현재 사용자 ID 가져오기
+        if (mAuth.getCurrentUser() != null) {
+            userId = mAuth.getCurrentUser().getUid();
+            recyclerView = findViewById(R.id.recyclerView);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this)); // Set the layout manager
+            recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)); // 구분선 추가
+            swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+            diaryManager = new DiaryManager();
 
-        loadDiaries(); // Initial load
-        setupSwipeRefreshLayout();
-        setupButton();
+            loadDiaries(); // Initial load
+            setupSwipeRefreshLayout();
+            setupButton();
+        } else {
+            startActivity(new Intent(this, EmailLoginActivity.class));
+            finish();
+        }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         NavigationHelper.setupBottomNavigationView(bottomNavigationView, this);

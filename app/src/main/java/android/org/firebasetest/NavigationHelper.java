@@ -17,7 +17,7 @@ public class NavigationHelper {
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.navigation_home) {
-                context.startActivity(new Intent(context, MainActivity.class));
+                context.startActivity(new Intent(context, ViewDiariesActivity.class));
                 ((Activity) context).finish();
                 return true;
             } else if (itemId == R.id.navigation_shared) {

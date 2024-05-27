@@ -22,7 +22,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBECizExzq2-38B-_v10_Dqdcb5u_RdGd4" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ViewDiariesActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +32,7 @@
         </activity>
         <activity android:name=".EmailLoginActivity"/>
         <activity android:name=".RegisterActivity"/>
-        <activity android:name=".ViewDiariesActivity"/>
+        <activity android:name=".MainActivity"/>
         <activity android:name=".CreateGroupActivity"/>
         <activity android:name=".ViewGroupsActivity"/>
         <activity android:name=".GroupActivity"/>
