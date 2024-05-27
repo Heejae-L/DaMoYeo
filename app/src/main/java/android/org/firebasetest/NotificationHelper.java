@@ -77,7 +77,7 @@ public class NotificationHelper extends ContextWrapper {
         return new NotificationCompat.Builder(getApplicationContext(), channel1ID)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setSmallIcon(R.drawable.ic_home)
+                .setSmallIcon(R.drawable.vector_logo)
                 .setContentIntent(resultPendingIntent) // Set the Intent to be launched when the notification is clicked
                 .setAutoCancel(true); // Notification will disappear after clicking on it
     }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FirebaseTest</string>
+    <string name="app_name">다모여</string>
     <string name="default_web_client_id">your-web-client-id</string>
     <string-array name="gender_options">
         <item>Male</item>

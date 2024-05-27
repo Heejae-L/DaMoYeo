@@ -71,7 +71,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                                 // 이메일 인증이 완료된 경우
                                 Toast.makeText(EmailLoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                                 String userId = user.getUid();  // 사용자 ID 가져오기
-                                Intent intent = new Intent(EmailLoginActivity.this, MainActivity.class);
+                                Intent intent = new Intent(EmailLoginActivity.this, ViewDiariesActivity.class);
                                 intent.putExtra("userId", userId);  // 인텐트에 사용자 ID 추가
                                 startActivity(intent);  // MainActivity 시작
                                 finish();  // 현재 액티비티 종료
