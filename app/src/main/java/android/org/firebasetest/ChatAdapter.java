@@ -48,7 +48,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
             // 현재 사용자의 메시지인 경우 노란색으로 변경
             if (message.getUsername().equalsIgnoreCase(myUsername.trim())) {
-                holder.itemView.setBackgroundColor(Color.YELLOW);
+                holder.itemView.setBackgroundColor(Color.parseColor("#FFDCD9C2"));
             } else {
                 holder.itemView.setBackgroundColor(Color.WHITE); // 재활용된 뷰의 배경색을 초기화
             }
