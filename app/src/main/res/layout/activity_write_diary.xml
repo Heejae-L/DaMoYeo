@@ -4,95 +4,230 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WriteDiaryActivity">
+    android:orientation="vertical">
 
-    <!-- Top App Bar -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+
+    <!-- Floating Action Button -->
+
+    <!-- Floating Action Button Menu -->
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="-75dp"
+        tools:layout_editor_absoluteY="0dp">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/top_app_bar"
+        <!-- Top App Bar -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:navigationIcon="?android:attr/homeAsUpIndicator"
-            app:title="Write Diary" />
-    </com.google.android.material.appbar.AppBarLayout>
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <!-- Title EditText -->
-    <EditText
-        android:id="@+id/editTextTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Title"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/top_app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:navigationIcon="?android:attr/homeAsUpIndicator"
+                app:title="Write Diary" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-    <EditText
-        android:id="@+id/editTextDate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Date"
-        app:layout_constraintTop_toBottomOf="@id/editTextTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/editTextWeather"/>
 
-    <EditText
-        android:id="@+id/editTextWeather"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Weather"
-        app:layout_constraintTop_toBottomOf="@id/editTextDate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <!-- Title EditText -->
+        <EditText
+            android:id="@+id/editTextTitle"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="Title"
+            android:textStyle="bold"
+            android:background="@drawable/content_background"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="8dp"
+            android:padding="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
-    <EditText
-        android:id="@+id/editTextFeeling"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Feeling"
-        app:layout_constraintTop_toBottomOf="@id/editTextWeather"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <!-- DatePicker -->
+        <DatePicker
+            android:id="@+id/pickerDate"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"/>
 
-    <EditText
-        android:id="@+id/editTextLocation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Location"
-        app:layout_constraintTop_toBottomOf="@id/editTextFeeling"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <!-- EditText -->
+        <EditText
+            android:id="@+id/editTextContent"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/content_background"
+            android:gravity="top|start"
+            android:hint="Write your diary entry here..."
+            android:padding="15dp"
+            android:scrollbars="vertical"/>
 
-    <EditText
-        android:id="@+id/editTextContent"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:hint="Content"
-        android:background="@drawable/content_background"
-        app:layout_constraintTop_toBottomOf="@id/editTextLocation"
-        app:layout_constraintBottom_toTopOf="@id/buttonSaveDiary"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.4" />
+        <EditText
+            android:id="@+id/editTextLocation"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="8dp"
+            android:hint="location"/>
 
-    <Button
-        android:id="@+id/buttonSaveDiary"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/selected_weather"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="4dp" />
+
+            <ImageView
+                android:id="@+id/selected_mood"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginBottom="4dp" />
+
+
+            <ImageView
+                android:id="@+id/recorded_voice"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginBottom="4dp" />
+
+            <LinearLayout
+                android:id="@+id/imagesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/buttonSaveDiary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_custom_round"
+            android:text="SAVE"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_weather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save Diary"
-        app:layout_constraintTop_toBottomOf="@id/editTextContent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:src="@drawable/icon_weather"
+        app:elevation="0dp"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="@id/fab_main"
+        app:layout_constraintEnd_toEndOf="@id/fab_main"
+        app:layout_constraintStart_toStartOf="@id/fab_main"
+        app:layout_constraintTop_toTopOf="@id/fab_main" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_mood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_mood"
+        app:fabSize="mini"
+        app:elevation="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/fab_main"
+        app:layout_constraintEnd_toEndOf="@id/fab_main"
+        app:layout_constraintStart_toStartOf="@id/fab_main"
+        app:layout_constraintTop_toTopOf="@id/fab_main" />
+
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_location"
+        app:fabSize="mini"
+        app:elevation="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/fab_main"
+        app:layout_constraintEnd_toEndOf="@id/fab_main"
+        app:layout_constraintStart_toStartOf="@id/fab_main"
+        app:layout_constraintTop_toTopOf="@id/fab_main" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_image"
+        app:fabSize="mini"
+        app:elevation="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/fab_main"
+        app:layout_constraintEnd_toEndOf="@id/fab_main"
+        app:layout_constraintStart_toStartOf="@id/fab_main"
+        app:layout_constraintTop_toTopOf="@id/fab_main" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_voice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_voice"
+        app:fabSize="mini"
+        app:elevation="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/fab_main"
+        app:layout_constraintEnd_toEndOf="@id/fab_main"
+        app:layout_constraintStart_toStartOf="@id/fab_main"
+        app:layout_constraintTop_toTopOf="@id/fab_main" />
+
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/icon_menu"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

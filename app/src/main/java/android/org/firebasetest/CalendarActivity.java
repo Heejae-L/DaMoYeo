@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -75,7 +77,6 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class CalendarActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks{
 
     TextView monthYearText;//년월 텍스트뷰
-    RecyclerView recyclerView;
 
     //Google Calendar API에 접근하기 위해 사용되는 구글 캘린더 API 서비스 객체
 
@@ -104,6 +105,8 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
     private DateInfo selectedDateInfo;  // 선택된 날짜 저장
 
     private DateTime selectedDate; // 선택된 날짜를 DateTime 객체로 저장
+    private RecyclerView recyclerViewEvents;
+    private EventDetailsAdapter eventDetailsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,8 +125,8 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
         ImageButton nextbtn = findViewById(R.id.next_btn);
         Button changeAccountButton = findViewById(R.id.change_account_button);
 
-        recyclerView = findViewById(R.id.recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewEvents= findViewById(R.id.recyclerViewEvents);
+        recyclerViewEvents.setLayoutManager(new LinearLayoutManager(this));
 
         //현재 날짜
         CalendarUtil.selectedDate = Calendar.getInstance();
@@ -183,7 +186,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
             @Override
             public void onClick(View v) {
                 mAddEventButton.setEnabled(false);
-                //mStatusText.setText("");
                 showAddEventDialog();  // 이벤트 제목을 입력받는 대화상자를 표시
                 mID = 2;        //이벤트 생성
                 getResultsFromApi();
@@ -195,7 +197,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
             @Override
             public void onClick(View v) {
                 mGetEventButton.setEnabled(false);
-                //mStatusText.setText("");
                 mID = 3;        //이벤트 가져오기
                 selectedDate = new DateTime(System.currentTimeMillis());  // 현재 날짜 설정, 실제 앱에서는 사용자가 선택한 날짜를 이용
                 getResultsFromApi();
@@ -221,7 +222,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
         int year = calendar.get(calendar.YEAR);
         int month = calendar.get(calendar.MONTH);
 
-        String monthYear = month + "월" + year;
+        String monthYear = (month+1) + "월" + year;
         return monthYear;
     }
 
@@ -237,16 +238,16 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
             adapter.setDateSelectedListener((year, month, day) -> {
                 selectedDateInfo = new DateInfo(year, month, day); // 날짜 정보 저장
                 String dateMessage = year + "년 " + month + "월 " + day + "일 선택됨";
-                Toast.makeText(CalendarActivity.this, dateMessage, Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.this, dateMessage, Toast.LENGTH_LONG).show();
                 Log.d("MainActivity", "Selected date: " + year + "-" + month + "-" + day);
             });
-            recyclerView.setAdapter(adapter);
+            recyclerViewEvents.setAdapter(adapter);
         } else {
             adapter.updateDayList(dayList);
         }
 
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 7);
-        recyclerView.setLayoutManager(manager);
+        recyclerViewEvents.setLayoutManager(manager);
     }
 
     //날짜 생성
@@ -604,12 +605,25 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
             String edate = enddate.getText().toString();
             String etime = endtime.getText().toString();
 
-            if (sdate.isEmpty() || stime.isEmpty() || edate.isEmpty() || etime.isEmpty()) {
-                Toast.makeText(CalendarActivity.this, "날짜와 시간을 입력해주세요.", Toast.LENGTH_LONG).show();
-            } else {
-                mID = 2;  // 이벤트 생성
-                new MakeRequestTask(CalendarActivity.this, mCredential, title, location, description, sdate, stime, edate, etime).execute();
-                dialog.dismiss(); // 모든 입력이 유효하면 다이얼로그 닫기
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+
+            try {
+                Date startDate = dateFormat.parse(sdate + " " + stime);
+                Date endDate = dateFormat.parse(edate + " " + etime);
+
+                if (startDate == null || endDate == null) {
+                    Toast.makeText(CalendarActivity.this, "날짜와 시간 형식이 잘못되었습니다.", Toast.LENGTH_LONG).show();
+                } else if (sdate.isEmpty() || stime.isEmpty() || edate.isEmpty() || etime.isEmpty()) {
+                    Toast.makeText(CalendarActivity.this, "날짜와 시간을 입력해주세요.", Toast.LENGTH_LONG).show();
+                } else if (endDate.before(startDate)) {
+                    Toast.makeText(CalendarActivity.this, "종료 날짜가 시작 날짜보다 이전일 수 없습니다.", Toast.LENGTH_LONG).show();
+                } else {
+                    mID = 2;  // 이벤트 생성
+                    new MakeRequestTask(CalendarActivity.this, mCredential, title, location, description, sdate, stime, edate, etime).execute();
+                    dialog.dismiss(); // 모든 입력이 유효하면 다이얼로그 닫기
+                }
+            } catch (ParseException e) {
+                Toast.makeText(CalendarActivity.this, "날짜 형식이 잘못되었습니다. 올바른 형식으로 입력해주세요.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -623,38 +637,17 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
 
     // 날짜 선택 이벤트 처리
     public void onDateSelected(int year, int month, int day) {
-        Toast.makeText(this, "Selected: " + year + "-" + month + "-" + day, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Selected: " + year + "-" + month + "-" + day, Toast.LENGTH_SHORT).show();
     }
-/*
-    // 날짜 더블클릭 이벤트 처리
-    public void onDateDoubleClicked(int year, int month, int day) {
-        // 더블클릭 이벤트에 대한 처리
-        Toast.makeText(this, "Double Clicked: " + year + "-" + month + "-" + day, Toast.LENGTH_SHORT).show();
-        // 여기에 새 창을 열거나, 상세 정보를 표시하는 등의 추가 작업을 할 수 있습니다.
-        openEventDetails(year, month, day);
-    }
-
-    // 이벤트 상세 정보를 표시하는 메소드
-    private void openEventDetails(int year, int month, int day) {
-        // 이 메소드에서 새 Activity를 시작하거나, DialogFragment를 표시하는 로직을 구현할 수 있습니다.
-        // 예를 들어, EventDetailsActivity라는 새 Activity가 있다고 가정했을 때:
-        Intent intent = new Intent(this, EventDetailsActivity.class);
-        intent.putExtra("YEAR", year);
-        intent.putExtra("MONTH", month);
-        intent.putExtra("DAY", day);
-        startActivity(intent);
-    }
-*/
 
 
     //비동기적으로 Google Calendar API 호출
-    private class MakeRequestTask extends AsyncTask<Void, Void, String> {
+    private class MakeRequestTask extends AsyncTask<Void, Void, List<EventDetail>> {
 
         private Exception mLastError = null;
         private CalendarActivity mActivity;
-        List<String> eventStrings = new ArrayList<String>();
-        //업뎃중~~~~
         private String mTitle, mLocation, mDescription, msDate, msTime, meDate, meTime;  // 이벤트 제목, 위치, 설명을 저장할 필드 추가
+        private GoogleAccountCredential mCredential;
 
         public MakeRequestTask(CalendarActivity activity, GoogleAccountCredential credential) {
             this(activity, credential, "", "", "", "", "", "", ""); // 기본값으로 빈 문자열을 사용
@@ -685,24 +678,25 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
 
         @Override
         protected void onPreExecute() {
-            // mStatusText.setText("");
-            mProgress.show();
-//            mStatusText.setText("데이터 가져오는 중...");
-//            mResultText.setText("");
+            if (!mActivity.isFinishing()) { // Activity가 종료되지 않았는지 확인
+                mProgress.show(); // Activity가 종료되지 않은 경우에만 ProgressDialog를 표시
+            }
         }
 
 
         //백그라운드에서 Google Calendar API 호출 처리
         @Override
-        protected String doInBackground(Void... params) {
+        protected List<EventDetail> doInBackground(Void... params) {
             try {
                 switch (mID) {
                     case 1:
-                        return createCalendar(); // Call to create a calendar
+                        createCalendar();
+                        return null;
                     case 2:
-                        return addEvent();       // Call to add an event
+                        addEvent();
+                        return null;
                     case 3:
-                        return getEvent();       // Call to get events
+                        return getEvent();
                 }
             } catch (Exception e) {
                 mLastError = e;
@@ -714,11 +708,11 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
 
 
         //CalendarTitle 이름의 캘린더에서 10개의 이벤트를 가져와 리턴
-        private String getEvent() throws IOException {
-
+        private List<EventDetail> getEvent() throws IOException {
             // Calendar 객체를 사용하여 선택된 날짜 설정
             TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul"); // 예를 들어 서울 시간대
             Calendar cal = Calendar.getInstance(timeZone);
+
             cal.set(Calendar.YEAR, selectedDateInfo.getYear());
             cal.set(Calendar.MONTH, selectedDateInfo.getMonth() - 1); // Calendar.MONTH는 0에서 시작하므로 1을 빼줍니다.
             cal.set(Calendar.DAY_OF_MONTH, selectedDateInfo.getDay());
@@ -736,13 +730,12 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
             cal.set(Calendar.SECOND, 59);
             DateTime endTime = new DateTime(cal.getTimeInMillis());
 
-
             String calendarID = getCalendarID("CalendarTitle");
             if (calendarID == null) {
-                return "캘린더를 먼저 생성하세요.";
+                throw new IOException("캘린더를 먼저 생성하세요.");
             }
 
-            Events events = mService.events().list(calendarID)//"primary")
+            Events events = mService.events().list(calendarID)
                     .setMaxResults(10)
                     .setTimeMin(startTime)
                     .setTimeMax(endTime)
@@ -750,7 +743,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                     .setSingleEvents(true)
                     .execute();
             List<Event> items = events.getItems();
-            List<String> eventStrings = new ArrayList<>();
+            List<EventDetail> eventDetails = new ArrayList<>();
 
             for (Event event : items) {
                 DateTime start = event.getStart().getDateTime();
@@ -758,10 +751,22 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                     // 모든 이벤트가 시작 시간을 갖고 있지는 않다. 그런 경우 시작 날짜만 사용
                     start = event.getStart().getDate();
                 }
-                eventStrings.add(String.format("%s \n (%s)", event.getSummary(), start));
+                DateTime end = event.getEnd().getDateTime();
+                if (end == null) {
+                    end = event.getEnd().getDate();
+                }
+
+                // 한국 시간대에 맞게 포맷팅
+                SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+                dateTimeFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+                String formattedStartTime = dateTimeFormat.format(new Date(start.getValue()));
+                String formattedEndTime = dateTimeFormat.format(new Date(end.getValue()));
+
+                eventDetails.add(new EventDetail(event.getSummary(), start, end, event.getId(), event.getLocation(), event.getDescription(), formattedStartTime, formattedEndTime));
             }
-            return TextUtils.join("\n", eventStrings);
+            return eventDetails;
         }
+
 
         //선택되어 있는 Google 계정에 새 캘린더를 추가한다.
         private String createCalendar() throws IOException {
@@ -808,22 +813,23 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
 
 
         @Override
-        protected void onPostExecute(String output) {
-            mProgress.hide();
-            if (output != null && !output.isEmpty()) {
-                //              mStatusText.setText(output);
+        protected void onPostExecute(List<EventDetail> eventDetails) {
+            if (!mActivity.isFinishing() && !mActivity.isDestroyed() && mProgress.isShowing()) {
+                mProgress.dismiss();
+            }
+            if (eventDetails != null && !eventDetails.isEmpty()) {
                 if (mID == 3) {  // 이벤트 정보 가져오기가 완료된 경우
                     Intent intent = new Intent(CalendarActivity.this, EventDetailsActivity.class);
                     intent.putExtra("YEAR", selectedDateInfo.getYear());
                     intent.putExtra("MONTH", selectedDateInfo.getMonth());
                     intent.putExtra("DAY", selectedDateInfo.getDay());
-                    intent.putExtra("eventDetails", output);  // 가져온 이벤트 정보를 인텐트에 추가
+                    intent.putExtra("ACCOUNT_NAME", mCredential.getSelectedAccountName()); // 계정 정보 추가
+                    // 이벤트 데이터를 직렬화하여 인텐트에 추가
+                    ArrayList<EventDetail> eventDetailArrayList = new ArrayList<>(eventDetails);
+                    intent.putParcelableArrayListExtra("eventDetails", eventDetailArrayList);
                     startActivity(intent);  // EventDetailsActivity 시작
-                } else {
-                    //                   mResultText.setText(TextUtils.join("\n\n", eventStrings));
                 }
             } else {
-                //          mStatusText.setText("정보를 불러올 수 없습니다.");
                 Toast.makeText(CalendarActivity.this, "이벤트 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
             }
         }
@@ -841,8 +847,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                 startActivityForResult(
                         ((UserRecoverableAuthIOException) mLastError).getIntent(),
                         CalendarActivity.REQUEST_AUTHORIZATION);
-            } else {
-                //         mStatusText.setText("MakeRequestTask The following error occurred:\n" + mLastError.getMessage());
             }
         }
         private com.google.api.services.calendar.model.Calendar service;
@@ -856,25 +860,10 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                 return "캘린더를 먼저 생성하세요.";
             }
 
-            /*
-            if (selectedDateInfo == null) {
-                Log.e("CalendarAPI", "selectedDateInfo is null");
-                return "선택된 날짜 정보가 없습니다.";
-            }
-            */
-
-            //Log.d("CalendarAPI", "Selected Year: " + selectedDateInfo.getYear());
-            //Log.d("CalendarAPI", "Selected Month: " + selectedDateInfo.getMonth());
-            //Log.d("CalendarAPI", "Selected Day: " + selectedDateInfo.getDay());
-
             Log.d("CalendarAPI", "캘린더 ID: " + calendarID); // 캘린더 ID 로깅
 
             String startdateTimeString = msDate + "T" + msTime + ":00+09:00"; // +09:00은 한국 표준시(KST)를 의미
             String enddateTimeString = meDate + "T" + meTime + ":00+09:00"; // +09:00은 한국 표준시(KST)를 의미
-
-            //해당 변수로 하단 event의 DateTime 수정시 달력에서 입력한 날의 9시로 지정됨.
-            //코드 수정 후 다로 dailog창에서 입력받기로 결정해서 필요 없어짐
-            //DateTime DateTime = new DateTime(String.format("%d-%02d-%02dT09:00:00+09:00", selectedDateInfo.getYear(), selectedDateInfo.getMonth(), selectedDateInfo.getDay()));
 
             DateTime startDateTime = new DateTime(startdateTimeString);
             DateTime endDateTime = new DateTime(enddateTimeString);
@@ -908,45 +897,8 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                 return "이벤트 생성에 실패했습니다: " + e.getMessage();
             }
         }
+
+
     }
 }
-
-
-
-//이벤트 생성의 경우
-//종료 날짜가 시작 날짜보다 앞설 경우 경고
-//시간이 null일 경우 디폴트값으로 현재시간으로 설정--입력 안하면 안만들어지게 설정
-//화면 좀 이쁘게 정리...
-//dialog말고 아예 새 창을 띄우는게 차라리 나을거같음
-//새 액티비티나 프레그먼트--복잡할거같아서 일단 뒤로 미뤄둠
-//구글 달력 생성 창 참고합쉬다
-
-//추가 구현 필요 기능
-//이벤트 불러오기, 알람, 멤버 추가
-
-//이벤트 불러오기의 경우
-//selecteddate 이용해서 해당 날짜의 이벤트를 새 창으로 띄우면 될듯--완성~~
-
-//일정 삭제, 수정, 세부 내용 확인
-//현재 이벤트 불러오기 상태
-//날짜 클릭 후 getevent버튼 클릭 시 그 날의 일정, 제목과 시작 시간만 뜸
-//추가로 넣어야 하는게
-//종료시간, 내용, 세부 일정 확인 창
-//일정 확인 창에서 일정 수정 및 삭제 가능하면 좋을듯...?
-
-
-
-
-//알람 기능의 경우
-//이벤트 추가 시 설정 가능하게 하면 될거같은데...
-//현재 알람 방식-이메일, 팝업
-//확인 결과 팝업은 웹 캘린더 페이지에서도 뜸
-//근데 크게 상관 없을듯?
-//핸드폰의 알람 어플과 연동 방법 없나-있을듯? 근데 일단 거기까지는 애매하다고 생각함. 보류
-
-
-//일단 이벤트 추가 창 좀 지저분해서 정리하고 싶은...
-
-//참가자 추가의 경우
-//일단 해당 기능에 대해서는 조금 더 뜯어보고....
 

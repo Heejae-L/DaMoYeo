@@ -1,36 +1,47 @@
 package android.org.firebasetest;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.util.List;
 
 public class Diary implements Parcelable {
     private String diaryId;
     private String authorId;
     private String date;
     private String title;
-    private String weather;
-    private String feeling;
+   // private String weather;
+    //private String feeling;
+   private int weatherImageId;
+    private int moodImageId;
     private String location;
-    private String image;
+    private List<String> imageUrls;
     private String voice;
     private String content;
+    private boolean isVoice;
+
+
 
     // 기본 생성자
     public Diary() {
     }
 
     // 모든 필드를 포함하는 생성자
-    public Diary(String diaryId, String authorId, String date,String title, String weather, String feeling, String location, String image, String voice, String content) {
+    public Diary(String diaryId, String authorId, String date,String title, String location, List<String> imageUrls, String voice, String content,boolean isVoice,int weatherImageId, int moodImageId) {
         this.diaryId = diaryId;
         this.authorId = authorId;
         this.date = date;
         this.title = title;
-        this.weather = weather;
-        this.feeling = feeling;
         this.location = location;
-        this.image = image;
+        this.imageUrls = imageUrls;
         this.voice = voice;
         this.content = content;
+        this.isVoice = isVoice;
+        this.weatherImageId = weatherImageId;
+        this.moodImageId = moodImageId;
+
+
     }
 
     // Parcelable 생성자
@@ -39,12 +50,18 @@ public class Diary implements Parcelable {
         authorId = in.readString();
         date = in.readString();
         title = in.readString();
-        weather = in.readString();
-        feeling = in.readString();
+       // weather = in.readString();
+        //feeling = in.readString();
         location = in.readString();
-        image = in.readString();
+        imageUrls = in.createStringArrayList();
         voice = in.readString();
         content = in.readString();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            isVoice = in.readBoolean();
+        }
+        weatherImageId = in.readInt();
+        moodImageId = in.readInt();
+
     }
 
     public static final Parcelable.Creator<Diary> CREATOR = new Creator<Diary>() {
@@ -70,12 +87,17 @@ public class Diary implements Parcelable {
         dest.writeString(authorId);
         dest.writeString(date);
         dest.writeString(title);
-        dest.writeString(weather);
-        dest.writeString(feeling);
+       // dest.writeString(weather);
+        //dest.writeString(feeling);
         dest.writeString(location);
-        dest.writeString(image);
+        dest.writeStringList(imageUrls);
         dest.writeString(voice);
         dest.writeString(content);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            dest.writeBoolean(isVoice);
+        }
+        dest.writeInt(moodImageId);
+        dest.writeInt(weatherImageId);
     }
 
     // 게터와 세터 메소드
@@ -107,6 +129,7 @@ public class Diary implements Parcelable {
 
     public void setTitle(String title) {this.title = title;}
 
+    /*
     public String getWeather() {
         return weather;
     }
@@ -123,6 +146,8 @@ public class Diary implements Parcelable {
         this.feeling = feeling;
     }
 
+
+     */
     public String getLocation() {
         return location;
     }
@@ -131,14 +156,13 @@ public class Diary implements Parcelable {
         this.location = location;
     }
 
-    public String getImage() {
-        return image;
+    public List<String> getImageUrls() {
+        return imageUrls;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
-
     public String getVoice() {
         return voice;
     }
@@ -154,4 +178,29 @@ public class Diary implements Parcelable {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public Boolean getIsVoice() {
+        return isVoice;
+    }
+
+    public void setIsVoice(Boolean isVoice) {
+        this.isVoice = isVoice;
+    }
+
+    public int getWeatherImageId() {
+        return weatherImageId;
+    }
+
+    public void setWeatherImageId(int weatherImageId) {
+        this.weatherImageId = weatherImageId;
+    }
+
+    public int getMoodImageId() {
+        return moodImageId;
+    }
+
+    public void setMoodImageId(int moodImageId) {
+        this.moodImageId = moodImageId;
+    }
+
 }

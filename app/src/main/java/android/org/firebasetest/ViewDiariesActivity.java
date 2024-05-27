@@ -54,7 +54,7 @@ public class ViewDiariesActivity extends AppCompatActivity {
     }
 
     private void setupButton() {
-        findViewById(R.id.writeDiary).setOnClickListener(v -> startActivity(new Intent(ViewDiariesActivity.this, WriteDiaryActivity.class)));
+        findViewById(R.id.writeDiary).setOnClickListener(v -> startActivity(new Intent(ViewDiariesActivity.this, CreateDiaryActivity.class)));
         findViewById(R.id.btnSetAlarm).setOnClickListener(v -> startActivity(new Intent(ViewDiariesActivity.this, SetAlarmActivity.class)));
     }
 

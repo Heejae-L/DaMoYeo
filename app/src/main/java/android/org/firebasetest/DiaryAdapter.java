@@ -38,7 +38,7 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
         Diary diary = diaries.get(position);
         holder.textViewDate.setText(diary.getDate());
         holder.textViewTitle.setText(diary.getTitle());
-        holder.textViewFeeling.setText(diary.getFeeling());
+//        holder.textViewFeeling.setText(diary.getFeeling());
     }
 
     @Override
