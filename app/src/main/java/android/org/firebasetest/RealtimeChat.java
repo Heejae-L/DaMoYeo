@@ -1,6 +1,7 @@
 package android.org.firebasetest;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +26,7 @@ public class RealtimeChat extends AppCompatActivity {
     private String myUsername;
     private String groupId;
     private User currentUser;
+    private String myUserId;
     UserManager userManager;
 
     @Override
@@ -37,8 +39,10 @@ public class RealtimeChat extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         userManager = new UserManager();
-        String myUserId = getIntent().getStringExtra("userId");
+        myUserId = getIntent().getStringExtra("userId");
+        Log.e("chat","userId=" + myUserId);
         groupId = getIntent().getStringExtra("groupId");
+        Log.e("chat","Group=" + groupId);
 
         if (myUserId != null) {
             userManager.fetchUserById(myUserId, new UserManager.UserCallback() {
@@ -127,7 +131,6 @@ public class RealtimeChat extends AppCompatActivity {
         msg.put("username", myUsername);
         msg.put("message", text);
         msg.put("timestamp", new Date());
-        msg.put("seenCount", getGroupMemberCount() - 1);
 
         db.collection("Chat").document(groupId).collection("Messages")
                 .add(msg)

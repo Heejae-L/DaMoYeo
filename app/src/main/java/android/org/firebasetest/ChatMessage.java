@@ -7,7 +7,6 @@ public class ChatMessage {
     private String username;
     private String message;
     private Date timestamp;
-    private int seenCount; // Count of members who have seen the message
 
     public ChatMessage() {
         // Default constructor required for Firestore data mapping
@@ -18,7 +17,7 @@ public class ChatMessage {
         this.username = username != null ? username : "Unknown";
         this.message = message != null ? message : "";
         this.timestamp = timestamp != null ? timestamp : new Date();  // timestamp가 null이면 현재 시간을 기본값으로 사용
-        this.seenCount = seenCount;
+
     };
 
 
@@ -50,11 +49,4 @@ public class ChatMessage {
         this.timestamp = timestamp;
     }
 
-    public int getSeenCount() {
-        return seenCount;
-    }
-
-    public void setSeenCount(int seenCount) {
-        this.seenCount = seenCount;
-    }
 }

@@ -2,6 +2,7 @@ package android.org.firebasetest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -59,6 +60,7 @@ public class GroupActivity extends AppCompatActivity {
         recyclerViewMembers.setAdapter(adapter);
 
         userId = getIntent().getStringExtra("userId");
+        Log.e("why..","userId"+ userId);
         group = getIntent().getParcelableExtra("group");
 
         if (group != null) {
@@ -199,6 +201,7 @@ public class GroupActivity extends AppCompatActivity {
             Intent intent = new Intent(GroupActivity.this, AddGroupMemberActivity.class);
             intent.putExtra("groupId", group.getGroupId());
             intent.putExtra("userId", userId);
+            Log.e("why..","userId"+ userId);
             startActivity(intent);
         });
         Button ViewMapButton = findViewById(R.id.ViewMapButton);
@@ -208,13 +211,20 @@ public class GroupActivity extends AppCompatActivity {
             intent.putExtra("userId", userId);
             startActivity(intent);
         });
-        findViewById(R.id.view_chat_button).setOnClickListener(v -> startChatActivity(group, userId));
+
+        findViewById(R.id.view_chat_button).setOnClickListener(v -> {
+            Intent intent = new Intent(this, RealtimeChat.class);
+            intent.putExtra("groupId", group.getGroupId());
+            intent.putExtra("userId", userId);
+            Log.e("why..","userId"+ userId);
+            startActivity(intent);});
     }
 
     private void startChatActivity(Group group, String userId) {
         Intent intent = new Intent(this, RealtimeChat.class);
         intent.putExtra("groupId", group.getGroupId());
         intent.putExtra("userId", userId);
+        Log.e("why..","userId"+ userId);
         startActivity(intent);
     }
 }

@@ -49,13 +49,14 @@ public class ViewGroupsActivity extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        groupAdapter = new GroupAdapter(ViewGroupsActivity.this, groups);
+
         recyclerView = findViewById(R.id.recyclerViewGroups);
         recyclerView.setLayoutManager(new LinearLayoutManager(this)); // Set the layout manager
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)); // 구분선 추가
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         groups = new ArrayList<>();
-        groupAdapter = new GroupAdapter(ViewGroupsActivity.this, groups);
+        groupAdapter = new GroupAdapter(ViewGroupsActivity.this, groups, userId);
+        groupAdapter.setUserId(user.getUid());
         recyclerView.setAdapter(groupAdapter); // Set adapter before fetching data
         groupManager = new GroupManager();
 

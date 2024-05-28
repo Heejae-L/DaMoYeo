@@ -3,6 +3,7 @@ package android.org.firebasetest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     private Context context;
     private List<Group> groups;
     private GroupManager groupManager = new GroupManager();
+    public String userId;
 
-    public GroupAdapter(Context context, List<Group> groups) {
+    public GroupAdapter(Context context, List<Group> groups, String uId) {
         this.context = context;
         this.groups = groups;
+        this.userId = uId;
     }
 
     @NonNull
@@ -65,6 +68,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                     if (position != RecyclerView.NO_POSITION) {
                         Group group = groups.get(position);
                         Intent intent = new Intent(context, GroupActivity.class); // Change this if MemoActivity exists
+                        intent.putExtra("userId",userId);
                         intent.putExtra("group", group);  // Passing the Memo object
                         context.startActivity(intent);
                     }
@@ -104,6 +108,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         groups.remove(position);
         notifyItemRemoved(position);
         groupManager.deleteGroup(group.getGroupId()); // Make sure this method exists in your MemoManager
+    }
+
+    public void setUserId(String userId){
+        this.userId = userId;
     }
 }
 

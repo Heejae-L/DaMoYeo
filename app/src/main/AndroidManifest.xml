@@ -23,36 +23,39 @@
             android:value="AIzaSyBECizExzq2-38B-_v10_Dqdcb5u_RdGd4" />
         <activity
             android:name=".ViewDiariesActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EmailLoginActivity"/>
-        <activity android:name=".RegisterActivity"/>
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".CreateGroupActivity"/>
-        <activity android:name=".ViewGroupsActivity"/>
-        <activity android:name=".GroupActivity"/>
-        <activity android:name=".WriteMemoActivity"/>
-        <activity android:name=".ViewMemosActivity"/>
-        <activity android:name=".MemoActivity"/>
-        <activity android:name=".EditMemoActivity"/>
-        <activity android:name=".UserActivity"/>
-        <activity android:name=".EditUserActivity"/>
-        <activity android:name=".AddGroupMemberActivity"/>
-        <activity android:name="ViewMyInvitationsActivity"/>
-        <activity android:name=".DiaryActivity"/>
-        <activity android:name=".RealtimeChat"/>
-        <activity android:name=".CalendarActivity"/>
-        <activity android:name=".EventDetailsActivity"/>
-        <activity android:name=".MapActivity"/>
-        <activity android:name=".SetAlarmActivity"/>
-        <activity android:name=".EditEventActivity"/>
-        <activity android:name=".CreateDiaryActivity"/>
-        <receiver android:name=".AlertReceiver" />
+        <activity android:name=".EmailLoginActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".RegisterActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".CreateGroupActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ViewGroupsActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".GroupActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".WriteMemoActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ViewMemosActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".MemoActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".EditMemoActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".UserActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".EditUserActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".AddGroupMemberActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name="ViewMyInvitationsActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".DiaryActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".RealtimeChat" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".CalendarActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".EventDetailsActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".MapActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".SetAlarmActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".EditEventActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".CreateDiaryActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <receiver android:name=".AlertReceiver"  android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

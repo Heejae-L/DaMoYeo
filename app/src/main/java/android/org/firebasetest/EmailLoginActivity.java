@@ -67,7 +67,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();  // 현재 로그인한 사용자 가져오기
 
                         if (user != null) {
-                            if (user.isEmailVerified()||!user.isEmailVerified()) {
+                            if (user.isEmailVerified()) {
                                 // 이메일 인증이 완료된 경우
                                 Toast.makeText(EmailLoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                                 String userId = user.getUid();  // 사용자 ID 가져오기
