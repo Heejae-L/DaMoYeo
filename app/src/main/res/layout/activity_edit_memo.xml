@@ -51,15 +51,16 @@
         android:layout_height="wrap_content"
         android:hint="Edit Feeling"
         app:layout_constraintTop_toBottomOf="@id/editTextWeather"
-        app:layout_constraintBottom_toTopOf="@id/editTextLocation"
+        app:layout_constraintBottom_toTopOf="@id/editTextTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/editTextLocation"
+        android:id="@+id/editTextTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Edit Location"
+        android:hint="Title"
+        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/editTextFeeling"
         app:layout_constraintBottom_toTopOf="@id/editTextBodyText"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +72,7 @@
         android:layout_height="0dp"
         android:hint="Edit Content"
         android:background="@drawable/content_background"
-        app:layout_constraintTop_toBottomOf="@id/editTextLocation"
+        app:layout_constraintTop_toBottomOf="@id/editTextTitle"
         app:layout_constraintBottom_toTopOf="@id/buttonSaveChanges"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

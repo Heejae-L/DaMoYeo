@@ -66,6 +66,7 @@ public class MemoActivity extends AppCompatActivity {
         buttonEditMemo.setOnClickListener(v -> {
             Intent intent = new Intent(MemoActivity.this, EditMemoActivity.class);
             intent.putExtra("memoId", memo.getMemoId());
+            intent.putExtra("memo",memo);
             startActivity(intent);
         });
     }

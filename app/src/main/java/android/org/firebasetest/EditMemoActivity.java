@@ -17,10 +17,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EditMemoActivity extends AppCompatActivity {
-    private EditText editTextFeeling, editTextBodyText;
+    private EditText editTextDate,editTextWeather,editTextTitle,editTextFeeling, editTextBodyText;
     private Button buttonSaveChanges;
     private DatabaseReference databaseReference;
     private String memoId;
+    private Memo memo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +40,15 @@ public class EditMemoActivity extends AppCompatActivity {
                 finish();
             }
         });
-
+        editTextDate = findViewById(R.id.editTextDate);
+        editTextWeather = findViewById(R.id.editTextWeather);
+        editTextTitle = findViewById(R.id.editTextTitle);
         editTextFeeling = findViewById(R.id.editTextFeeling);
         editTextBodyText = findViewById(R.id.editTextBodyText);
         buttonSaveChanges = findViewById(R.id.buttonSaveChanges);
 
-        memoId = getIntent().getStringExtra("memoId"); // Receive the Memo ID
+        memo = getIntent().getParcelableExtra("memo"); // Receive the Memo ID
+        memoId = memo.getMemoId();
         databaseReference = FirebaseDatabase.getInstance().getReference("memos").child(memoId);
 
         // Load memo details from the database or intent
@@ -56,10 +60,10 @@ public class EditMemoActivity extends AppCompatActivity {
     }
 
     private void loadMemoDetails() {
-        // Here you would normally load data from Firebase, but since we are assuming it's passed as an intent extra
-        // This is just for demonstration assuming data is directly available
-        Memo memo = getIntent().getParcelableExtra("memo");
         if (memo != null) {
+            editTextDate.setText(memo.getDate());
+            editTextTitle.setText(memo.getTitle());
+            editTextWeather.setText(memo.getWeather());
             editTextFeeling.setText(memo.getFeeling());
             editTextBodyText.setText(memo.getBodyText());
         } else {
@@ -68,6 +72,9 @@ public class EditMemoActivity extends AppCompatActivity {
     }
 
     private void saveMemoChanges() {
+        String updatedDate = editTextDate.getText().toString().trim();
+        String updatedWeather = editTextWeather.getText().toString().trim();
+        String updatedTitle = editTextTitle.getText().toString().trim();
         String updatedFeeling = editTextFeeling.getText().toString().trim();
         String updatedBodyText = editTextBodyText.getText().toString().trim();
 
@@ -78,6 +85,9 @@ public class EditMemoActivity extends AppCompatActivity {
 
         // Prepare updates map
         Map<String, Object> updates = new HashMap<>();
+        updates.put("date", updatedDate);
+        updates.put("weather", updatedWeather);
+        updates.put("title", updatedTitle);
         updates.put("feeling", updatedFeeling);
         updates.put("bodyText", updatedBodyText);
 
