@@ -155,15 +155,17 @@
         app:layout_constraintEnd_toEndOf="parent">
         <Button
             android:id="@+id/button_main_add_calendar"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:text="Add Calendar" />
         <Button
             android:id="@+id/button_main_add_event"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:text="Add Event" />
@@ -182,16 +184,18 @@
 
         <Button
             android:id="@+id/button_main_get_event"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:text="Get Event" />
 
         <Button
             android:id="@+id/change_account_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="계정 정보 초기화" />
     </LinearLayout>
 

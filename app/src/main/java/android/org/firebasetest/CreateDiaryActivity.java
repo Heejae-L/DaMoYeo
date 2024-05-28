@@ -414,39 +414,6 @@ public class CreateDiaryActivity extends AppCompatActivity {
         imageView.setImageURI(imageUri);
         imagesLayout.addView(imageView);
     }
-/*
-    private void saveDiaryToDatabase(String title, String content, String date, String userId, List<String> imageUrls) {
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("diaryEntries");
-        String entryId = isEditMode ? diaryId : databaseRef.push().getKey();
-
-        Diary diary = new Diary(diaryId, userId, date, title, location, imageUrls, null, content, false, weather,mood);
-
-        databaseRef.child(entryId).setValue(diary)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(CreateDiaryActivity.this, "Diary saved successfully", Toast.LENGTH_SHORT).show();
-                    finish();
-                })
-                .addOnFailureListener(e -> Toast.makeText(CreateDiaryActivity.this, "Failed to save diary", Toast.LENGTH_SHORT).show());
-    }
-
-    private void uploadImages(String title, String content, String date, String userId) {
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference("diaryImages");
-        List<String> uploadedImageUrls = new ArrayList<>();
-
-        for (Uri imageUri : imageUris) {
-            StorageReference fileRef = storageRef.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
-            fileRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
-                fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    uploadedImageUrls.add(uri.toString());
-                    if (uploadedImageUrls.size() == imageUris.size()) {
-                        saveDiaryToDatabase(title, content, date, userId, uploadedImageUrls);
-                    }
-                });
-            }).addOnFailureListener(e -> Toast.makeText(CreateDiaryActivity.this, "Failed to upload image: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-        }
-    }
-
- */
 
     private String getFileExtension(Uri uri) {
         String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(this.getContentResolver().getType(uri));

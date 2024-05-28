@@ -177,13 +177,6 @@ public class GroupActivity extends AppCompatActivity {
     }
 
     private void setupButtons(Group group) {
-        Button writeMemo = findViewById(R.id.WriteMemoButton);
-        writeMemo.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), WriteMemoActivity.class);
-            intent.putExtra("group", group);
-            intent.putExtra("userId", userId);
-            startActivity(intent);
-        });
 
         Button viewMemos = findViewById(R.id.ViewMemoButton);
         viewMemos.setOnClickListener(v -> {
@@ -192,9 +185,6 @@ public class GroupActivity extends AppCompatActivity {
             intent.putExtra("userId", userId);
             startActivity(intent);
         });
-
-        Button groupChatButton = findViewById(R.id.GroupChatButton);
-        groupChatButton.setOnClickListener(v -> startChatActivity(group, userId));
 
         Button addMemberButton = findViewById(R.id.AddMemberButton);
         addMemberButton.setOnClickListener(v -> {

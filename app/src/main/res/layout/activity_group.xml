@@ -118,25 +118,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp" />
 
-            <!-- Group Chat Button -->
-            <Button
-                android:id="@+id/GroupChatButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Group Chat"
-                android:textSize="16sp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp" />
-
-            <!-- Write Memo Button -->
-            <Button
-                android:id="@+id/WriteMemoButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Write Memo"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp" />
-
         </LinearLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
