@@ -830,7 +830,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                     startActivity(intent);  // EventDetailsActivity 시작
                 }
             } else {
-                Toast.makeText(CalendarActivity.this, "이벤트 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CalendarActivity.this, "다이어리 불러오기 완료.", Toast.LENGTH_SHORT).show();
             }
         }
 
