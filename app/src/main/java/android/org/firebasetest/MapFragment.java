@@ -15,6 +15,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,13 +24,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
-    private Location mLastKnownLocation;
+    private FusedLocationProviderClient fusedLocationClient; // FusedLocationProviderClient 선언
     private static final int LOCATION_PERMISSION_REQUEST = 1;
     private List<Marker> markers = new ArrayList<>();
 
@@ -36,6 +39,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+
+        // FusedLocationProviderClient 초기화
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
         // 지도 프래그먼트 설정
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
@@ -54,9 +60,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.getUiSettings().setMyLocationButtonEnabled(true); // 기본 '내 위치' 버튼 비활성화
         mMap.setOnMapClickListener(this::handleMapClick); // 지도 클릭 이벤트
 
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+        // 위치 권한이 있는 경우, 현재 위치로 지도 이동
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true); // 위치 권한이 있는 경우, '내 위치' 표시 활성화
+            initializeMapToCurrentLocation(); // 현재 위치로 지도 초기화 메서드 호출
         }
 
         mMap.setOnMarkerClickListener(marker -> {
@@ -67,9 +74,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void requestLocationPermission() { // 위치 권한 요청
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
+            ActivityCompat.requestPermissions(requireActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION_REQUEST);
         }
@@ -77,7 +84,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void handleMapClick(LatLng latLng) { // 지도 클릭 시 마커 추가
         mMap.addMarker(new MarkerOptions().position(latLng));
-        Toast.makeText(getActivity(), "Saved Location: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_LONG).show();
+        Toast.makeText(requireActivity(), "Saved Location: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -85,13 +92,38 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED) {
+                    initializeMapToCurrentLocation(); // 위치 권한이 허용된 경우, 현재 위치로 지도 초기화 메서드 호출
                     mMap.setMyLocationEnabled(true);
                 }
             } else {
-                Toast.makeText(getActivity(), "Permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), "Permission denied", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
+    private void initializeMapToCurrentLocation() {
+        // Check if the location permission is granted
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            // Get the last known location
+            fusedLocationClient.getLastLocation().addOnSuccessListener(requireActivity(), location -> {
+                if (location != null) {
+                    // Convert the current location into a LatLng object
+                    LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+                    // Move the camera to the current location and zoom in
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+                } else {
+                    // If no location is available, inform the user
+                    Toast.makeText(requireActivity(), "Unable to get current location", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            // Permission is not granted, inform the user
+            Toast.makeText(requireActivity(), "Location permission not granted", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

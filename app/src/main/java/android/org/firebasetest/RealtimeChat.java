@@ -119,13 +119,14 @@ public class RealtimeChat extends AppCompatActivity {
     }
 
     private void updateChatList(ArrayList<ChatMessage> newMessages) {
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ChatDiffCallback(chatList, newMessages));
-        chatList.clear();
-        chatList.addAll(newMessages);
-        diffResult.dispatchUpdatesTo(adapter);
-        scrollToBottom();
+        if (adapter != null) { // adapter가 null이 아닌지 확인
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ChatDiffCallback(chatList, newMessages));
+            chatList.clear();
+            chatList.addAll(newMessages);
+            diffResult.dispatchUpdatesTo(adapter);
+            scrollToBottom();
+        }
     }
-
     private void sendMessage(String text) {
         Map<String, Object> msg = new HashMap<>();
         msg.put("username", myUsername);
@@ -153,7 +154,4 @@ public class RealtimeChat extends AppCompatActivity {
         }
     }
 
-    private int getGroupMemberCount() {
-        return 5; // Placeholder for group member count
-    }
 }

@@ -57,6 +57,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private String groupId;
     private Group group;
     private Map map;
+    private FusedLocationProviderClient fusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
         mapManager = new MapManager(group);
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        initializeMapToCurrentLocation();
 
         // 자동완성 프래그먼트 설정
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
@@ -290,6 +294,32 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             } else {
                 Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    // 현재 위치로 지도 초기화하는 메서드
+    private void initializeMapToCurrentLocation() {
+        // 위치 권한 확인
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // 위치 권한이 허용된 경우, 현재 위치를 가져와 지도를 해당 위치로 이동
+            fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+                if (location != null) {
+                    // 현재 위치를 LatLng 객체로 변환
+                    LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+                    // GoogleMap 객체가 생성되었고, 유효한 경우
+                    if (mMap != null) {
+                        // 현재 위치로 지도 이동 및 확대
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+                    }
+                } else {
+                    // 현재 위치를 가져오지 못한 경우, 사용자에게 메시지 표시
+                    Toast.makeText(MapActivity.this, "Unable to get current location", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            // 위치 권한이 거부된 경우, 사용자에게 위치 권한 요청
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST);
         }
     }
 }
